@@ -1,0 +1,25 @@
+{
+  "name": "testing",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MiaSchultink/testing-project.git"
+  },
+  "author": "Mia",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MiaSchultink/testing-project/issues"
+  },
+  "homepage": "https://github.com/MiaSchultink/testing-project#readme"
+}
