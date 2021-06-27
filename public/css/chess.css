@@ -1,0 +1,21 @@
+.board{
+    width: 90vh;
+    height: 90vh;
+    display: table;
+    table-layout: fixed;
+    border-collapse: collapse;
+    position: relative;
+    background-color: #BA9472;
+}
+
+.cell{
+    border-color: black;
+    font-size: 40px; 
+    text-align: center;
+    height: calc(90vh / 8);
+}
+
+.button{
+    height: 30px;
+    width: 50px;
+}
