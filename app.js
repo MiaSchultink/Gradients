@@ -14,7 +14,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/login', loginRoutes);
 
 app.use('/', (req, res, next) => {
-    res.render('index', {
+    res.status(200).render('index', {
         pageTitle: 'Home page',
         path: '/'
     });
@@ -41,4 +41,4 @@ app.use((req, res, next) => {
     });
 });
 
-//app.listen(3000);
+app.listen(3000);
