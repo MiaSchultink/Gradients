@@ -11,6 +11,9 @@ const loginRoutes = require('./routes/login')
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+
+
 app.use('/login', loginRoutes);
 
 app.use('/', (req, res, next) => {
@@ -19,7 +22,6 @@ app.use('/', (req, res, next) => {
         path: '/'
     });
 });
-
 
 // app.use('/login', (req,res, next)=>{
 //   res.render('login',{
@@ -41,4 +43,5 @@ app.use((req, res, next) => {
     });
 });
 
-app.listen(3000);
+//app.listen(3000);
+module.exports = app
