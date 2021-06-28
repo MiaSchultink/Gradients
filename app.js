@@ -4,6 +4,8 @@ const path = require('path');
 const express = require('express');
 const app = express();
 
+//const controller404 = require('./controllers/404.js');
+
 app.set('view engine', 'ejs')
 app.set('views', 'views')
 
@@ -21,6 +23,8 @@ app.use('/', (req, res, next) => {
 });
 
 
+//app.use(controller404.get404);
+
 // app.use('/login', (req,res, next)=>{
 //   res.render('login',{
 //       pageTitle: 'Log-in',
@@ -32,6 +36,7 @@ app.use('/', (req, res, next) => {
 //     console.log('hello')
 //     res.render('index');
 // });
+
 
 
 app.use((req, res, next) => {
