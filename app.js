@@ -4,44 +4,27 @@ const path = require('path');
 const express = require('express');
 const app = express();
 
+const controller404 = require('./controllers/error');
+
 app.set('view engine', 'ejs')
 app.set('views', 'views')
 
-const loginRoutes = require('./routes/login')
+const userRoutes = require('./routes/users')
+const gradientRoutes  = require('./routes/gradient')
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use('/users', userRoutes);
+app.use('/gradients', gradientRoutes);
 
-
-app.use('/login', loginRoutes);
-
-app.use('/', (req, res, next) => {
+app.get('/', (req, res, next) => {
     res.status(200).render('index', {
         pageTitle: 'Home page',
-        path: '/'
+        path: '/home'
     });
 });
 
-// app.use('/login', (req,res, next)=>{
-//   res.render('login',{
-//       pageTitle: 'Log-in',
-//       path: '/login'
-//   });
-// });
+app.use(controller404.get404);
 
-// app.use((req,res, next)=>{
-//     console.log('hello')
-//     res.render('index');
-// });
-
-
-app.use((req, res, next) => {
-    res.status(404).render('404', {
-        pageTitle: 'page not found',
-        path: ''
-    });
-});
-
-//app.listen(3000);
 module.exports = app
