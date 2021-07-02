@@ -2,6 +2,8 @@
 <body>
     <%- include('includes/navigation.ejs')%>
     <form action= "/gradient/create" method ="post">
+        <input type ="text" name = "title">
+        <input type= "text" name ="tags" placeholder="seperate by comas">
         <select name ="color1" >
             <option value="#FF0000">Red</option>
             <option value="#0000ff">Blue</option>

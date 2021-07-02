@@ -1,8 +1,18 @@
+require('dotenv').config()
+
 const path = require('path');
 
 //const fs = require('fs');
+const mongoose = require('mongoose')
 const express = require('express');
 const app = express();
+
+mongoose.connect(process.env.MONGO_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: true
+})
 
 const controller404 = require('./controllers/error');
 
