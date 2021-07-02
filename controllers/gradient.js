@@ -1,17 +1,26 @@
 exports.getGradientPage =(req, res, next) =>{
- res.render('gradient', {
+ res.render('create-form', {
      pageTitle: 'Gradient-creation',
-     path: '/gradients'
- })
+     path: '/gradient/create'
+ });
 };
 
 exports.postGradientPage = (req, res, next) =>{
     console.log(req.body);
-    res.render('gradient-result', {
+    res.render('create-result', {
         pageTitle: 'Your gradients',
-        path: '/gradients',
+        path: '/gradient/create',
         color1: req.body.color1,
         color2: req.body.color2
-    })
-}
+    });
+};
+
+exports.getGradientLibrary = (req, res, next) =>{
+res.render('library',{
+    pageTitle: 'Gradient-library',
+    path: '/gradient/library'
+})
+};
+
+
 

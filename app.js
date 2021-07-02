@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/users', userRoutes);
-app.use('/gradients', gradientRoutes);
+app.use('/gradient', gradientRoutes);
 
 app.get('/', (req, res, next) => {
     res.status(200).render('index', {
