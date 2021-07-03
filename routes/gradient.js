@@ -7,4 +7,8 @@ router.post('/create', gradientController.postGradientPage);
 
 router.get('/library', gradientController.getGradientLibrary);
 
+router.get('/view/:gradientId', gradientController.getGradientView);
+
+router.post('/library', gradientController.postToLibrary);
+
 module.exports = router;

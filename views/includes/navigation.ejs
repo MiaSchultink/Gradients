@@ -1,12 +1,14 @@
 <body>
+    <script src="https://kit.fontawesome.com/9eb54e81b4.js" crossorigin="anonymous"></script>
 <header class="main-header">
     <nav class="main-header__nav">
         <ul class="main-header__item-list">
-            <li class="main-header__item"><a class = "<%= path === '/' ? 'active' : ''%>" href="/">Home</a></li>
+            <li class="main-header__item"><a class = "<%= path === '/' ? 'active' : ''%>" href="/"><i class="fas fa-home"></i></li>
             <li class="main-header__item"><a  class = "<%= path === '/users/login' ? 'active' : ''%>"href="/users/login">Login</a></li>
             <li class="main-header__item"><a class = "<%= path === '/users/sign-up' ? 'active' : ''%>" href="/users/sign-up">Sign-up</a></li>
             <li class="main-header__item"><a  class = "<%= path === '/gradient/create' ? 'active' : ''%>"href="/gradient/create">Gradient-creation</a></li>
             <li class="main-header__item"><a  class = "<%= path === '/gradient/library' ? 'active' : ''%>"href="/gradient/library">Gradient-library</a></li>
+            <li class="main-header__item"><a class = "<%= path === '/users/profile' ? 'active' : ''%>" href="/users/profile"> <i class="fas fa-user"></i></a></li>
         </ul>
     </nav>
 </header>

@@ -1,0 +1,21 @@
+<%- include('includes/head.ejs')%>
+
+<body>
+  <%- include('includes/navigation.ejs')%>
+    <h1><%=title%> </h1>
+
+    <canvas class ="canvas" id="gradient-canvas" width="500" height="500"></canvas>
+    <script>
+      const canvas = document.getElementById("gradient-canvas");
+      console.log(canvas);
+      const context = canvas.getContext("2d");
+      const gradient = context.createLinearGradient(0,0, 500,0);
+      gradient.addColorStop(0, '<%=color1%>');
+      gradient.addColorStop(1, '<%=color2%>');
+
+      context.fillStyle = gradient;
+      context.fillRect(0, 0, 500, 500);
+      </script>
+
+<%- include('includes/end.ejs')%>
+      

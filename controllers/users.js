@@ -32,4 +32,11 @@ exports.postSignUp = async(req, res, next) => {
     console.log(req.body)
     await user.save()
     res.redirect('/gradient/create');
-}
+};
+
+exports.getProfile = (req, res, next) =>{
+res.render('profile', {
+ pageTitle: 'Your profile',
+ path: '/profile'
+});
+}; 
