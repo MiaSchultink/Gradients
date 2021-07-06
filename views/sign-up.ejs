@@ -3,21 +3,22 @@
     <body>
         <%- include('includes/navigation.ejs')%>
 
-            <form action="/users/login" method="post">
-                <div class ="form-group" >
-                    <label>Name</label>
-                    <input type= "text" class="form-control" name="name" required>
-                </div>
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="text" class="form-control" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" class="form-control" name="password" required>
-                </div>
+        <form class = "form" action="/users/sign-up" method="post">
+            <div class ="form-group" >
+                <label>Name</label>
+                <input type= "text" id = "name" class="form-control" name="name" required>
+            </div>
+            <div class="form-group">
+                <label>E-mail</label>
+                <input type="email" id = "email" class="form-control" name="email" required>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id = "password" class="form-control" name="password" required>
+            </div>
 
-                <button type="submit" class="btn btn-warning btn-lg">Sign Up</button>
-            </form>
+            <button type="submit" class="btn">Login</button>
+        </form>
+
 
     <%- include('includes/end.ejs')%>

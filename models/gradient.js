@@ -13,6 +13,10 @@ const gradientSchema = new Schema({
     tags: {
         type: [String],
     },
+    userId:{
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    }
 });
 
 module.exports = mongoose.model('Gradient', gradientSchema);

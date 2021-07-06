@@ -9,6 +9,7 @@ exports.getLogIn = (req, res, next) => {
 }
 
 exports.postLogin = (req, res, next) => {
+    req.session.isLoggedIn =  true;
     res.redirect('/');
 }
 
@@ -29,7 +30,7 @@ exports.postSignUp = async(req, res, next) => {
         email: email,
         password: password
     });
-    console.log(req.body)
+    
     await user.save()
     res.redirect('/gradient/create');
 };

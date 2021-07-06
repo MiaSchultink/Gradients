@@ -16,8 +16,10 @@ padding: 1rem;
 
 .main-header__nav {
     height: 100%;
+    width: 100%;
     display: flex;
     align-items: center;
+    justify-content: space-between;
 }
 
 .main-header__item-list {
@@ -43,9 +45,37 @@ padding: 1rem;
     color: #df911b;
 }
 
-/* .box{
-    background-color:purple;
-    height: 500px;
-    width: 500px;
-} */
+/* forms stuff */
+
+.form{
+    display: inline-block;
+    align-items: center;
+    justify-content: center;
+    margin: 1rem;
+    box-sizing: border-box;
+}
+.form-group{
+   font-family: Arial, Helvetica, sans-serif;
+   margin: 1rem;
+}
+
+.btn{
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 5px;
+    background-color: #df911b;
+    color: black;
+    border-radius: 9px;
+    height: 30px;
+    width: 70px;
+    cursor: pointer;
+    padding: 0;
+    border: none;
+
+}
+.btn:hover{
+    background-color: #E4B91C;
+}
+
+
+
 
