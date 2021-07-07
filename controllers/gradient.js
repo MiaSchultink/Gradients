@@ -76,5 +76,11 @@ exports.getGradientView = async (req, res, next) => {
     });
 };
 
+exports.getColorPicker = (req, res, next) =>{
+    res.render('color-picker', {
+        pageTitle: 'Color-Picker',
+        path: '/color-picker'
+    });
+};
 
 
