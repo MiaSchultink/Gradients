@@ -48,7 +48,7 @@ padding: 1rem;
 /* forms stuff */
 
 .form{
-    display: block;
+    display: inline-block;
     align-items: center;
     justify-content: center;
     margin: 1rem;
