@@ -3,11 +3,31 @@
     <body>
         <%- include('includes/navigation.ejs')%>
             <form class="form" action="/gradient/create" method="post">
-                <input type="text" name="title" required>
-                <input type="text" name="tags" placeholder="seperate by comas">
-                <input type="color" name="color1" required>
-                <input type="color" name="color2" required>
+                <label for="title"> Gradient name</label>
+                <input id ="title" class = "form-input-text" type="text" name="title" placeholder="Your gradient tilte..." required>
+
+                <label for="tags">Tags</label>
+                <input id = "tags" class = "form-input-text" type="text" name="tags" placeholder="seperate by comas">
+
+                <label for ="color"></label>
+                <input id = "color" class = "form-input-color" type="color" name="color1" placeholder="color..." required>
+                <input id = "color" class = "form-input-color" type="color" name="color2" placeholder="color..." required>
                 <button class="btn" type="submit">Create Gradient</button>
             </form>
+
+            <canvas class ="canvas" id="gradient-canvas" width="500" height="500"></canvas>
+    <script>
+
+      const canvas = document.getElementById("gradient-canvas");
+      console.log(canvas);
+      const context = canvas.getContext("2d");
+      const gradient = context.createLinearGradient(0,0, 500,0);
+      gradient.addColorStop(0, "#21E330");
+      gradient.addColorStop(1, "#71DAC3");
+
+      context.fillStyle = gradient;
+      context.fillRect(0, 0, 500, 500);
+
+    </script>
 
             <%- include('includes/end.ejs')%>

@@ -48,7 +48,7 @@ padding: 1rem;
 /* forms stuff */
 
 .form{
-    display: inline-block;
+    display: block;
     align-items: center;
     justify-content: center;
     margin: 1rem;
@@ -65,8 +65,8 @@ padding: 1rem;
     background-color: #df911b;
     color: black;
     border-radius: 9px;
-    height: 30px;
-    width: 70px;
+    height: 40px;
+    width: 100px;
     cursor: pointer;
     padding: 0;
     border: none;
@@ -74,6 +74,25 @@ padding: 1rem;
 }
 .btn:hover{
     background-color: #E4B91C;
+}
+.form-input-text{
+    height: 30px;
+    width: 200px;
+    border-radius: 5px;
+    border-color: black;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    display: inline-block;
+}
+.form-input-color{
+    height: 30px;
+    width: 50px;
+    border-radius: 5px;
+    border-style: none;
+    border-color: transparent;
+    box-sizing: border-box;
+    display: inline-block;
 }
 
 
