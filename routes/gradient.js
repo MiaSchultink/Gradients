@@ -11,6 +11,4 @@ router.get('/view/:gradientId', gradientController.getGradientView);
 
 router.post('/library', gradientController.postToLibrary);
 
-router.get('/color-picker', gradientController.getColorPicker);
-
 module.exports = router;

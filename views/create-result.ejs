@@ -3,14 +3,6 @@
 <body>
   <%- include('includes/navigation.ejs')%>
     <h1>Thank you for submitting, <%= color1 %> , <%= color2 %> </h1>
-    <!-- <div class= "box" id= "box"></div> -->
-
-    <!-- <script>
-      console.log("hello");
-     const box  = document.getElementById('box');
-    // box.style.backgroundColor = '<%=color1%>';
-     box.style.backgroundImage = `linear-gradient(to left, ${'<%=color1%>'}, ${'<%=color2%>'})`;
-    </script> -->
 
 
     <canvas class ="canvas" id="gradient-canvas" width="500" height="500"></canvas>
@@ -25,15 +17,9 @@
 
       context.fillStyle = gradient;
       context.fillRect(0, 0, 500, 500);
-    //   const base64 = canvas.toDataURL('image/jpeg')
-    //   console.log(base64)
-    //  // document.write('<img src="'+image+'"/>');
 
     </script>
-    <!-- <button class = "btn">Download</button> -->
-    <!-- <a href="javascript:canvas.toDataURL('image/jpeg');" download="download" >Download as jpeg</a>
-    <a href="javascript:base64">Right click to download</a>
-     -->
+
      <form class = "form" action ="/gradient/library" method = "post" >
       <input type = "hidden" name = "title" value = '<%=title%>'>
       <input type = "hidden" name = "color1" value = '<%=color1%>'>
@@ -41,12 +27,6 @@
       <input type = "hidden" name = "tags" value = '<%=tags%>'>
       <button class = "btn" type= "submit">Contribute to Library</button>
      </form>
-      
-    <!-- <form method = "post">
-      <input type = "hidden" name =  "gradientId" value = "">
-      <button type= "submit">Save to favorites</button>
-    </form> -->
-
 
 
     <%- include('includes/end.ejs')%>

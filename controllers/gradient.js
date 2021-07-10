@@ -1,25 +1,7 @@
 
 const Gradient = require('../models/gradient.js')
-const Picker = require('../models/color-picker.js');
-
 
 exports.getGradientPage = (req, res, next) => {
-
-
-    // let picker = new Picker(document.getElementById('color-picker'), 240, 220);
-    // setInterval(() => picker.draw(), 1);
-
-
-    // picker.onChange((color) => {
-    //     //Get the preview DOM element
-    //     let selected = document.getElementsByClassName("selected")[0];
-    //     //Change it's backagroundColor to the current color (rgb CSS function)
-    //     const convertedRgb = picker.convertToHex();
-    //     console.log("converted hex", convertedRgb);
-    //     selected.style.backgroundColor = convertedRgb.toString();
-    // });
-
-
     res.render('create-form', {
         pageTitle: 'Gradient-creation',
         path: '/gradient/create'
@@ -93,12 +75,4 @@ exports.getGradientView = async (req, res, next) => {
         color2: gradient.colors[1]
     });
 };
-
-exports.getColorPicker = (req, res, next) => {
-    res.render('color-picker', {
-        pageTitle: 'Color-Picker',
-        path: '/color-picker'
-    });
-};
-
 
