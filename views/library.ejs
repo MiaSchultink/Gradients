@@ -1,7 +1,8 @@
 <%- include('includes/head.ejs')%>
-
 <body>
   <%- include('includes/navigation.ejs')%>
+  <h1>Gradient Library</h1>
+  <div class ="container">
   <script>
     function makeGradient(color1, color2, canvasId){
     const canvas = document.getElementById(canvasId);
@@ -21,5 +22,5 @@
      <script>makeGradient('<%=gradients[i].colors[0]%>', '<%=gradients[i].colors[1]%>', '<%=gradients[i]._id%>')</script>
    
     <%}%>
-
+  </div>
     <%- include('includes/end.ejs')%>

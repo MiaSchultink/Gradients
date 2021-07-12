@@ -21,7 +21,10 @@ exports.postGradientPage = async (req, res, next) => {
 };
 
 exports.postToLibrary = async (req, res, next) => {
-    const title = req.body.title;
+    let title = req.body.title;
+    if(title.length===0){
+        title="gradient"
+    }
     const colors = [req.body.color1, req.body.color2];
     const tagsArray = req.body.tags.split(',');
     console.log(tagsArray);
@@ -54,7 +57,7 @@ exports.postToLibrary = async (req, res, next) => {
 
 exports.getGradientLibrary = async (req, res, next) => {
     const gradients = await Gradient.find().exec();
-    console.log(gradients)
+    //console.log(gradients)
     res.render('library', {
         pageTitle: 'Gradient-library',
         path: '/gradient/library',
@@ -64,9 +67,8 @@ exports.getGradientLibrary = async (req, res, next) => {
 
 exports.getGradientView = async (req, res, next) => {
     const gradientId = req.params.gradientId;
-    console.log(req.params.gradientId)
+    
     const gradient = await Gradient.findById(gradientId)
-    console.log(gradient)
     res.render('gradient-view', {
         pageTitle: gradient.title,
         path: '/gradient-view',
@@ -74,5 +76,6 @@ exports.getGradientView = async (req, res, next) => {
         color1: gradient.colors[0],
         color2: gradient.colors[1]
     });
+    console.log(gradient.title)
 };
 

@@ -2,10 +2,10 @@
 
 <body>
   <%- include('includes/navigation.ejs')%>
-    <h1>Thank you for submitting, <%= color1 %> , <%= color2 %> </h1>
+    <!-- <h1><%=title%></h1> -->
 
-
-    <canvas class ="canvas" id="gradient-canvas" width="500" height="500"></canvas>
+    <%-include('includes/gradient-view.ejs')%>
+    <!-- <canvas class ="canvas" id="gradient-canvas" width="500" height="500"></canvas>
     <script>
 
       const canvas = document.getElementById("gradient-canvas");
@@ -18,7 +18,7 @@
       context.fillStyle = gradient;
       context.fillRect(0, 0, 500, 500);
 
-    </script>
+    </script> -->
 
      <form class = "form" action ="/gradient/library" method = "post" >
       <input type = "hidden" name = "title" value = '<%=title%>'>

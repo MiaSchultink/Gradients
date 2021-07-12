@@ -1,18 +1,29 @@
 <%- include('includes/head.ejs')%>
 
     <body>
+        <link rel="stylsheet" href="../public/css/forms.css">
         <%- include('includes/navigation.ejs')%>
             <form class="form" action="/gradient/create" method="post">
-                <label for="title"> Gradient name</label>
-                <input id ="title" class = "form-input-text" type="text" name="title" placeholder="Your gradient tilte..." required>
+                <div class="form-group">
+                    <label for="title"> Gradient name</label>
+                    <input id="title" class="form-input-text" type="text" name="title" 
+                        placeholder="Your gradient tilte...">
+                </div>
+                <div class="form-group">
+                    <label for="tags">Tags</label>
+                    <input id="tags" class="form-input-text" type="text" name="tags" placeholder="seperate by comas">
+                </div>
 
-                <label for="tags">Tags</label>
-                <input id = "tags" class = "form-input-text" type="text" name="tags" placeholder="seperate by comas">
-
-                <label for ="color"></label>
-                <input id = "color" class = "form-input-color" type="color" name="color1" placeholder="color..." required>
-                <input id = "color" class = "form-input-color" type="color" name="color2" placeholder="color..." required>
+                <div class="form-group">
+                <p>Colors</p>
+                    <input id="color" class="form-input-color" type="color" name="color1" placeholder="color..."
+                        required>
+                    <input id="color" class="form-input-color" type="color" name="color2" placeholder="color..."
+                        required>
+                </div>
+                <div class = "form-group">
                 <button class="btn" type="submit">Create Gradient</button>
+            </div>
             </form>
 
             <%- include('includes/end.ejs')%>
