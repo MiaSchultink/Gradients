@@ -2,6 +2,8 @@
 const User = require('../models/user');
 
 const bcrypt = require('bcryptjs');
+const sgMail = require('@sendgrid/mail')
+sgMail.setApiKey(process.env.API_KEY)
 
 exports.getLogIn = (req, res, next) => {
     res.render('login', {
@@ -11,62 +13,35 @@ exports.getLogIn = (req, res, next) => {
     });
 }
 
-// exports.postLogin = (req, res, next) => {
-//     const email = req.body.email;
-//     const password = req.body.password;
-//     User.findOne({ email: email })
-//         .then(user => {
-//             if (!user) {
-//                 return res.redirect('/users/login')
-//             }
-//             bcrypt.compare(password, user.password).then(doMatch => {
-//                 if (doMatch) {
-//                     req.session.isLoggedIn = true;
-//                     req.session.user = user;
-//                     return req.session.save(err => {
-//                         console.log(err)
-//                         return res.redirect('/')
-//                     });
-//                 }
-//                 res.redirect('/users/login')
-//             }).catch(err => {
-//                 console.log(err);
-//                 res.redirect('users/login')
-
-//             })
-
-//         })
-//         .catch(err => console.log(err));
-// }
 
 exports.postLogin = (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
     User.findOne({ email: email })
-      .then(user => {
-        if (!user) {
-          return res.redirect('/users/login');
-        }
-        bcrypt
-          .compare(password, user.password)
-          .then(doMatch => {
-            if (doMatch) {
-              req.session.isLoggedIn = true;
-              req.session.user = user;
-              return req.session.save(err => {
-                console.log(err);
-                res.redirect('/');
-              });
+        .then(user => {
+            if (!user) {
+                return res.redirect('/users/login');
             }
-            res.redirect('/users/login');
-          })
-          .catch(err => {
-            console.log(err);
-            res.redirect('/users/login');
-          });
-      })
-      .catch(err => console.log(err));
-  };
+            bcrypt
+                .compare(password, user.password)
+                .then(doMatch => {
+                    if (doMatch) {
+                        req.session.isLoggedIn = true;
+                        req.session.user = user;
+                        return req.session.save(err => {
+                            console.log(err);
+                            res.redirect('/');
+                        });
+                    }
+                    res.redirect('/users/login');
+                })
+                .catch(err => {
+                    console.log(err);
+                    res.redirect('/users/login');
+                });
+        })
+        .catch(err => console.log(err));
+};
 
 exports.postLogout = (req, res, next) => {
     req.session.destroy(err => {
@@ -102,7 +77,15 @@ exports.postSignUp = async (req, res, next) => {
                     gradients: []
                 });
                 return user.save()
-            }).then(result => {
+            })
+            .then(result => {
+                const message = {
+                    to: email,
+                    from: 'contact@miaschultink.com',
+                    subject: 'Sign-up Suceeded!',
+                    html: '<h1>You sucessfully signed up!</h1>'
+                }
+                sgMail.send(message)
                 res.redirect('/users/login')
             });
     })
@@ -111,6 +94,13 @@ exports.postSignUp = async (req, res, next) => {
         })
 
 };
+
+exports.getReset = (req, res, next) =>{
+    res.render('reset', {
+        pageTitle: 'Reset Password',
+        path: '/users/reset'
+    })
+}
 
 exports.getProfile = (req, res, next) => {
     res.render('profile', {
