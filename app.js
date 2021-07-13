@@ -5,15 +5,18 @@ const path = require('path');
 const mongoose = require('mongoose')
 const express = require('express');
 const session = require('express-session');
-const MongoDBStore = require('connect-mongodb-session')(session)
+const MongoDBStore = require('connect-mongodb-session')(session);
+const csrf = require('csurf');
 
-
+const User = require('./models/user');
 
 const app = express();
 const store = new MongoDBStore({
     uri: process.env.MONGO_URL,
     collection: 'sessions'
 });
+
+const csrfProtection = csrf();
 
 
 mongoose.connect(process.env.MONGO_URL, {
@@ -22,8 +25,6 @@ mongoose.connect(process.env.MONGO_URL, {
     useCreateIndex: true,
     useFindAndModify: true
 })
-
-
 
 app.set('view engine', 'ejs')
 app.set('views', 'views')
@@ -41,13 +42,37 @@ app.use(session({
     store: store
 }));
 
+app.use(csrfProtection);
+
+app.use((req, res, next) => {
+    if (!req.session.user) {
+      return next();
+    }
+    User.findById(req.session.user._id)
+      .then(user => {
+        req.user = user;
+        next();
+      })
+      .catch(err => console.log(err));
+  });
+
+  app.use((req, res, next) => {
+    res.locals.isAuthenticated = req.session.isLoggedIn;
+    res.locals.csrfToken = req.csrfToken();
+    next();
+  });
+  
+
 app.use('/users', userRoutes);
 app.use('/gradient', gradientRoutes);
 
 app.get('/', (req, res, next) => {
+    console.log('Loggedin', req.session.isLoggedIn)
     res.status(200).render('index', {
         pageTitle: 'Home page',
-        path: '/home'
+        path: '/',
+        isAuthenticated: req.body.isLoggedIn,
+        csrfToken: req.csrfToken()
     });
 });
 

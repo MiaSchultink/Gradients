@@ -5,8 +5,8 @@
         <ul class="main-header__item-list">
             <li class="main-header__item"><a class = "<%= path === '/' ? 'active' : ''%>" href="/"><i class="fas fa-home"></i></li>
             <li class="main-header__item"><a  class = "<%= path === '/users/login' ? 'active' : ''%>"href="/users/login">Login</a></li>
-            <il class="main-header__item"><form action="/users/logout" method="post"><button type="submit">Logout</button></form></il>
             <li class="main-header__item"><a class = "<%= path === '/users/sign-up' ? 'active' : ''%>" href="/users/sign-up">Sign-up</a></li>
+            <il class="main-header__item"><form action="/users/logout" method="post"><input type ="hidden" name ="_csrf" value= '<%=csrfToken%>'><button type="submit">Logout</button></form></il>
             <li class="main-header__item"><a  class = "<%= path === '/gradient/create' ? 'active' : ''%>"href="/gradient/create">Gradient-creation</a></li>
             <li class="main-header__item"><a  class = "<%= path === '/gradient/library' ? 'active' : ''%>"href="/gradient/library">Gradient-library</a></li>
             <li class="main-header__item"><a class = "<%= path === '/users/profile' ? 'active' : ''%>" href="/users/profile"> <i class="fas fa-user"></i></a></li>
