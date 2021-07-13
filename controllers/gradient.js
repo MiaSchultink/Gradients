@@ -2,10 +2,15 @@
 const Gradient = require('../models/gradient.js')
 
 exports.getGradientPage = (req, res, next) => {
+    if(!req.session.isLogedIn){
+        res.redirect('/users/login')
+    }
+    else{
     res.render('create-form', {
         pageTitle: 'Gradient-creation',
         path: '/gradient/create'
     });
+}
 };
 
 exports.postGradientPage = async (req, res, next) => {
@@ -27,7 +32,7 @@ exports.postToLibrary = async (req, res, next) => {
     }
     const colors = [req.body.color1, req.body.color2];
     const tagsArray = req.body.tags.split(',');
-    console.log(tagsArray);
+    console.log("tagsArray", tagsArray);
 
 
     const gradient = new Gradient({
@@ -76,6 +81,6 @@ exports.getGradientView = async (req, res, next) => {
         color1: gradient.colors[0],
         color2: gradient.colors[1]
     });
-    console.log(gradient.title)
+    console.log("gradient title", gradient.title);
 };
 
