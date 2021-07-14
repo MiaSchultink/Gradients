@@ -1,6 +1,7 @@
 
 const User = require('../models/user');
 
+const crypto = require('crypto')
 const bcrypt = require('bcryptjs');
 const sgMail = require('@sendgrid/mail')
 sgMail.setApiKey(process.env.API_KEY)
@@ -95,12 +96,45 @@ exports.postSignUp = async (req, res, next) => {
 
 };
 
-exports.getReset = (req, res, next) =>{
+exports.getReset = (req, res, next) => {
     res.render('reset', {
         pageTitle: 'Reset Password',
         path: '/users/reset'
     })
+};
+
+exports.postReset = async (req, res, next) => {
+    try {
+        const token = crypto.randomBytes(32).toString('hex');
+        const user = await User.findOne({ email: req.body.email }).exec()
+        if (!user) { throw new Error('No accounts with this email') }
+        else {
+            user.resetToken = token;
+            user.setTokenExpiration = Date.now() + 3600000
+            await user.save()
+            console.log(user)
+            console.log(req.body);
+            const host = (proces.env.NODE_ENV == 'development') ?
+                'http://localhost:3000' :
+                'http://www.miaschultink.com'
+            const message = {
+                to: req.body.email,
+                from: 'contact@miaschultink.com',
+                subject: 'Password Reset',
+                html: `
+        <p>You requested a password reset.</p>
+        <p>Click this <a href ="${host}/users/reset/${token}">link</a></p>`
+            }
+            await sgMail.send(message)
+            res.redirect('/');
+        }
+    }
+    catch (err) {
+        console.log('Error in postReset', err)
+        res.redirect('/users/reset')
+    }
 }
+
 
 exports.getProfile = (req, res, next) => {
     res.render('profile', {
