@@ -13,4 +13,9 @@
       context.fillStyle = gradient;
       context.fillRect(0, 0, 500, 500);
 
+      const dt = canvas.toDataURL('image/jpeg');
+      this.href = dt;
+
+      downloadLink.addEventListener('click', download, false); 
+
     </script>

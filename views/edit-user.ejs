@@ -1,0 +1,23 @@
+<%- include('includes/head.ejs')%>
+
+    <body>
+        <%- include('includes/navigation.ejs')%>
+
+            <form class="form" action="/users/profile/edit" method="post">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" id="name" class="form-control" name="name" value = '<%=user.name%>' required>
+                </div>
+                <div class="form-group">
+                    <label></label>
+                    <input type="hidden" id="eamil" class="form-control" name="email" value = '<%=user.email%>' required>
+                </div>
+                <div class="form-group">
+                    <label></label>
+                 <button class = "btn" type="submit" >Update profile</button>
+                </div>
+                <input type ="hidden" name ="_csrf" value= '<%=csrfToken%>'>
+                <input type ="hidden" name ="userId" value= '<%=user._id%>'>
+            </form>
+
+            <%- include('includes/end.ejs')%>

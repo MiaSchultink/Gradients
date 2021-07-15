@@ -30,6 +30,7 @@ app.set('view engine', 'ejs')
 app.set('views', 'views')
 
 const userRoutes = require('./routes/users')
+const adminController = require('./routes/admin')
 const gradientRoutes = require('./routes/gradient')
 const controller404 = require('./controllers/error');
 
@@ -57,14 +58,16 @@ app.use((req, res, next) => {
   });
 
   app.use((req, res, next) => {
-    res.locals.isAuthenticated = req.session.isLoggedIn;
+    res.locals.isLoggedIn = req.session.isLoggedIn;
     res.locals.csrfToken = req.csrfToken();
+    res.locals.isAdmin = req.session.isAdmin;
     next();
   });
   
 
 app.use('/users', userRoutes);
 app.use('/gradient', gradientRoutes);
+app.use('/admin', adminController); 
 
 app.get('/', (req, res, next) => {
     console.log('Loggedin', req.session.isLoggedIn)
@@ -72,7 +75,8 @@ app.get('/', (req, res, next) => {
         pageTitle: 'Home page',
         path: '/',
         isAuthenticated: req.body.isLoggedIn,
-        csrfToken: req.csrfToken()
+        csrfToken: req.csrfToken(),
+        user: req.user
     });
 });
 

@@ -23,7 +23,12 @@ const userSchema = new Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Gradient'
         }
-    ]
+    ],
+    role:{
+        type: String,
+        required: true,
+        default: 'user'
+    }
     
 });
 

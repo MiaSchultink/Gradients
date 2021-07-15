@@ -47,6 +47,17 @@ padding: 1rem;
     color: #df911b;
 }
 
+.nav_button{
+border: none;
+padding: 0;
+color:white;
+background: none;
+font-size: 16px;
+}
+.nav_button:hover{
+    color:#df911b;
+}
+
 /* forms stuff */
 
 .form{

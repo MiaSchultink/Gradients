@@ -4,5 +4,12 @@
   <%- include('includes/navigation.ejs')%>
     <h1>Your profile</h1>
       <input type ="hidden" name ="_csrf" value= '<%=csrfToken%>'>
+      <div><%=user.name%></div>
+      <div><%=user.email%></div>
+      <% if (userId == user._id) { %>
+      <a href= '/users/profile/edit/<%=user._id%>'>Edit profile</a>
+        <%}%>
+  
+    
 
     <%- include('includes/end.ejs')%>

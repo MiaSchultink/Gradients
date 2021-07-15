@@ -14,7 +14,6 @@ exports.getLogIn = (req, res, next) => {
     });
 }
 
-
 exports.postLogin = (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
@@ -29,6 +28,7 @@ exports.postLogin = (req, res, next) => {
                     if (doMatch) {
                         req.session.isLoggedIn = true;
                         req.session.user = user;
+                        req.session.isAddmin = (user.role=='admin');
                         return req.session.save(err => {
                             console.log(err);
                             res.redirect('/');
@@ -97,10 +97,20 @@ exports.postSignUp = async (req, res, next) => {
 };
 
 exports.getReset = (req, res, next) => {
-    res.render('reset', {
-        pageTitle: 'Reset Password',
-        path: '/users/reset'
-    })
+    try {
+        res.render('reset', {
+            pageTitle: 'Reset Password',
+            path: '/users/reset'
+        })
+    }
+    catch (err) {
+        console.log(err)
+        res.render('error', {
+            pageTitle: 'Error',
+            path: '/error',
+            message: 'Could not reach reset page'
+        })
+    }
 };
 
 exports.postReset = async (req, res, next) => {
@@ -110,11 +120,9 @@ exports.postReset = async (req, res, next) => {
         if (!user) { throw new Error('No accounts with this email') }
         else {
             user.resetToken = token;
-            user.setTokenExpiration = Date.now() + 3600000
+            user.resetTokenExpiration = Date.now() + 3600000
             await user.save()
-            console.log(user)
-            console.log(req.body);
-            const host = (proces.env.NODE_ENV == 'development') ?
+            const host = (process.env.NODE_ENV == 'development') ?
                 'http://localhost:3000' :
                 'http://www.miaschultink.com'
             const message = {
@@ -131,14 +139,133 @@ exports.postReset = async (req, res, next) => {
     }
     catch (err) {
         console.log('Error in postReset', err)
-        res.redirect('/users/reset')
+        res.render('error', {
+            pageTitle: 'Error',
+            path: '/error',
+            message: 'Reset password email failed'
+        })
     }
 }
 
+exports.getNewPassword = async (req, res, next) => {
+    try {
+        const token = req.params.token;
+        const user = await User.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } }).exec()
+        if (user) {
+            res.render('new-password', {
+                pageTitle: 'New-Password',
+                path: 'users/new-password',
+                userId: user._id.toString(),
+                passwordToken: token
+            });
+        }
+        else {
+            res.redirect('/users/reset')
+        }
+    }
+    catch (err) {
+        console.log('get reset pssword err', err)
+        res.render('error', {
+            pageTitle: 'Error',
+            path: '/error',
+            message: 'Failed to reach new password page'
+        })
+    }
+}
 
-exports.getProfile = (req, res, next) => {
-    res.render('profile', {
-        pageTitle: 'Your profile',
-        path: '/profile'
-    });
+exports.postNewPassword = async (req, res, next) => {
+    try {
+        const newPassword = req.body.password;
+        const userId = req.body.userId;
+        const passwordToken = req.body.passwordToken;
+
+
+        const user = await User.findOne({ resetToken: passwordToken, resetTokenExpiration: { $gt: Date.now() }, _id: userId }).exec()
+        const hashedPassword = await bcrypt.hash(newPassword, 12)
+
+        user.password = hashedPassword;
+        user.resetToken = null;
+        user.resetTokenExpiration = undefined;
+
+        await user.save();
+        res.redirect('/users/login')
+    }
+    catch (err) {
+        console.log('post reset password err', err)
+        res.render('error', {
+            pageTitle: 'Error',
+            path: '/error',
+            message: 'Password reset failed'
+        })
+    }
 };
+
+
+exports.getProfile = async (req, res, next) => {
+    try {
+        const userId = req.params.userId;
+        if (userId != req.session.user._id) {
+            throw new Error('Wrong profile')
+        }
+        const user = await User.findById(userId);
+        res.render('profile', {
+            pageTitle: 'Your profile',
+            path: '/users/profile',
+            userId: userId,
+            user: user
+        });
+    }
+    catch (err) {
+        console.log('profile get err', err)
+        res.render('error', {
+            pageTitle: 'Error',
+            path: '/error',
+            message: 'Wrong profile'
+        })
+    }
+};
+
+exports.getUserEdit = async (req, res, next) => {
+    const user = await User.findById(req.session.user._id).exec()
+    const userId = req.params.userId;
+    if (userId != req.session.user._id) {
+        throw new Error('Wrong profile')
+    }
+    res.render('edit-user', {
+        pageTitle: 'Edit User',
+        path: 'users/profile/edit',
+        userId: userId,
+        user: user
+    });
+}
+
+exports.postUserEdit = async (req, res, next) => {
+    try {
+        const userId = req.body.userId;
+        if (!userId == req.session.user._id) {
+            throw new Error('Cannot edit this user')
+        }
+
+        const user = await User.findById(req.session.user._id).exec()
+        if(!user){
+            throw new Error('User not found')
+        }
+
+        const updatedName = req.body.name;
+        const updatedEamil = req.body.email;
+
+        user.name = updatedName
+        user.email = updatedEamil
+
+        await user.save()
+        res.redirect('/users/profile/' + userId)
+    }
+    catch (err) {
+        console.log('edit user form error', err)
+        res.render('error', {
+            pageTitle: 'Error',
+            path: '/error',
+            message: 'Could not edit profile'
+        })
+    }
+}

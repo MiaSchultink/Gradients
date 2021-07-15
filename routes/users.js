@@ -14,6 +14,11 @@ router.post('/sign-up', userController.postSignUp);
 router.get('/reset', userController.getReset);
 router.post('/reset', userController.postReset);
 
-router.get('/profile',isAuth, userController.getProfile);
+router.get('/reset/:token', userController.getNewPassword);
+router.post('/new-password', userController.postNewPassword);
+
+router.get('/profile/:userId',isAuth, userController.getProfile);
+router.get('/profile/edit/:userId',isAuth, userController.getUserEdit);
+router.post('/profile/edit', isAuth, userController.postUserEdit);
 
 module.exports = router;
