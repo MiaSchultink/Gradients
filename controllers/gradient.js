@@ -2,7 +2,6 @@
 const Gradient = require('../models/gradient.js')
 
 exports.getGradientPage = (req, res, next) => {
-   
     res.render('create-form', {
         pageTitle: 'Gradient-creation',
         path: '/gradient/create'

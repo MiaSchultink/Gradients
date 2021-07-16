@@ -1,0 +1,9 @@
+<%- include('includes/head.ejs')%>
+
+<body>
+  <%- include('includes/navigation.ejs')%>
+    <% for(let i=0; i<gradients.length){ %>
+        <div><%=gradients[i]._id%></div>
+        <% } %> 
+
+    <%- include('includes/end.ejs')%>

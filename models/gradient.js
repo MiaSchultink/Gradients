@@ -16,6 +16,10 @@ const gradientSchema = new Schema({
     userId:{
         type: Schema.Types.ObjectId,
         ref: 'User'
+    },
+    library: {
+        type: Boolean,
+        default: false
     }
 });
 

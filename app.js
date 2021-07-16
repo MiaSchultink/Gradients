@@ -61,6 +61,7 @@ app.use((req, res, next) => {
     res.locals.isLoggedIn = req.session.isLoggedIn;
     res.locals.csrfToken = req.csrfToken();
     res.locals.isAdmin = req.session.isAdmin;
+    res.locals.user = req.session.user;
     next();
   });
   
@@ -73,10 +74,7 @@ app.get('/', (req, res, next) => {
     console.log('Loggedin', req.session.isLoggedIn)
     res.status(200).render('index', {
         pageTitle: 'Home page',
-        path: '/',
-        isAuthenticated: req.body.isLoggedIn,
-        csrfToken: req.csrfToken(),
-        user: req.user
+        path: '/'
     });
 });
 

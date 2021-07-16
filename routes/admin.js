@@ -5,4 +5,5 @@ const isAuth = require('../middlewear/is-auth')
 const isAdmin = require('../middlewear/is-admin')
 
 router.get('/users', isAuth, isAdmin, adminController.getAllUsers)
+router.get('/users/:userId', isAuth, isAdmin, adminController.getUser )
 module.exports = router;

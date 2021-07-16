@@ -4,12 +4,13 @@ const isAuth = require('../middlewear/is-auth.js')
 const gradientController = require('../controllers/gradient')
 
 router.get('/create', isAuth, gradientController.getGradientPage);
-router.post('/create', gradientController.postGradientPage);
+router.post('/create',isAuth, gradientController.postGradientPage);
 
-router.get('/library', gradientController.getGradientLibrary);
+router.get('/library', isAuth, gradientController.getGradientLibrary);
 
 router.get('/view/:gradientId', isAuth, gradientController.getGradientView);
 
-router.post('/library', gradientController.postToLibrary);
+router.post('/library', isAuth, gradientController.postToLibrary);
+
 
 module.exports = router;

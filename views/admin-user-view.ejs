@@ -1,0 +1,27 @@
+<%- include('includes/head.ejs')%>
+
+    <body>
+        <%- include('includes/navigation.ejs')%>
+
+            <form class="form" action="/admin/users" method="post">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" id="name" class="form-control" name="userName" value='<%=user.name%>' required>
+                </div>
+                <div class="form-group">
+                    <label>E-mail</label>
+                    <input type="email" id="email" class="form-control" name="email" value = '<%=user.email%>' required>
+                </div>
+                <div class="form-group">
+                    <label>User Id</label>
+                    <input type="text" id="id" class="form-control" name="userId" value ='<%=user._id%>' required>
+                </div>
+                
+                <div class="form-group">
+                    <button type="submit" class="btn">Update User</button>
+                </div>
+                <input type ="hidden" name ="_csrf" value= '<%=csrfToken%>'>
+            </form>
+            <!-- <a href="/users/reset">Reset Password</a> -->
+
+            <%- include('includes/end.ejs')%>

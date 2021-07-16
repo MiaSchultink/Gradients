@@ -1,5 +1,6 @@
 
 const User = require('../models/user');
+const Gradient = require('../models/gradient')
 
 const crypto = require('crypto')
 const bcrypt = require('bcryptjs');
@@ -10,7 +11,7 @@ exports.getLogIn = (req, res, next) => {
     res.render('login', {
         pageTitle: 'Login',
         path: '/login',
-        isAuthenticated: false
+        isLoggedIn: false
     });
 }
 
@@ -28,7 +29,7 @@ exports.postLogin = (req, res, next) => {
                     if (doMatch) {
                         req.session.isLoggedIn = true;
                         req.session.user = user;
-                        req.session.isAddmin = (user.role=='admin');
+                        req.session.isAdmin = (user.role=='admin');
                         return req.session.save(err => {
                             console.log(err);
                             res.redirect('/');
@@ -55,7 +56,7 @@ exports.getSignUp = (req, res, next) => {
     res.render('sign-up', {
         pageTitle: 'Sign-up',
         path: '/sign-up',
-        isAuthenticated: false
+        isLoggedIn: false
     });
 };
 
@@ -268,4 +269,22 @@ exports.postUserEdit = async (req, res, next) => {
             message: 'Could not edit profile'
         })
     }
+}
+
+///favorites 
+
+exports.addToFavorites =async (req, res , next) =>{
+    console.log('hello')
+    const gradient = await Gradient.findById(req.body.gradientId).exec();
+    const user = await User.findById(req.body.userId).exec();
+    user.gradients.push(gradient);
+    await user.save();
+
+    console.log(gradient)
+    res.render('favorites', {
+        pageTitle: 'favorites',
+        path: '/users/favorites',
+        gradients: user.gradients,
+        gradient: gradient
+    })
 }
