@@ -1,0 +1,17 @@
+<%- include('includes/head.ejs')%>
+
+<body>
+  <%- include('includes/navigation.ejs')%>
+
+
+  <form action="/gradient/search" method="post">
+    <input id="query" class='searchBar' type="search" name="query" placeholder="search for gradients...">
+    <button class="btn" type="submit">Search</button>
+    <input type="hidden" name="_csrf" value='<%=csrfToken%>'>
+  </form>
+ <h2>We found <%=count%> resutls for "<%=query%>"</h2>
+ 
+
+    <%-include('includes/library.ejs')%>
+
+    <%- include('includes/end.ejs')%>

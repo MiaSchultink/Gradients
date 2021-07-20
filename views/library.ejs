@@ -1,26 +1,15 @@
 <%- include('includes/head.ejs')%>
-<body>
-  <%- include('includes/navigation.ejs')%>
-  <h1>Gradient Library</h1>
-  <div class ="container">
-  <script>
-    function makeGradient(color1, color2, canvasId){
-    const canvas = document.getElementById(canvasId);
-      console.log(canvas);
-      const context = canvas.getContext("2d");
-      const gradient = context.createLinearGradient(0,0, 100,0);
-      gradient.addColorStop(0, color1);
-      gradient.addColorStop(1, color2);
 
-      context.fillStyle = gradient;
-      context.fillRect(0, 0, 100, 100);
-    }
-  </script>
-   <% for(let i=0; i<gradients.length; i++){%>
-     
-     <canvas id = '<%=gradients[i]._id%>' class = "small-canvas" height="100px" width = "100px" onclick = "location.assign('/gradient/view/<%=gradients[i]._id%>')"></canvas>
-     <script>makeGradient('<%=gradients[i].colors[0]%>', '<%=gradients[i].colors[1]%>', '<%=gradients[i]._id%>')</script>
-   
-    <%}%>
-  </div>
-    <%- include('includes/end.ejs')%>
+  <body>
+    <%- include('includes/navigation.ejs')%>
+      <h1>Gradient Library</h1>
+      <form action="/gradient/search" method="post">
+        <input id="query" class='searchBar' type="search" name="query" placeholder="search for gradients...">
+        <button class="btn" type="submit">Search</button>
+        <input type="hidden" name="_csrf" value='<%=csrfToken%>'>
+      </form>
+
+      <%-include('includes/library.ejs')%>
+
+
+        <%- include('includes/end.ejs')%>

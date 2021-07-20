@@ -26,13 +26,36 @@
       <input type = "hidden" name = "color2" value = '<%=color2%>'>
       <input type = "hidden" name = "tags" value = '<%=tags%>'>
       <input type ="hidden" name ="_csrf" value= '<%=csrfToken%>'>
+      <input type="hidden" name="gradientId" value='<%=gradientId%>'> 
       <button class = "btn" type= "submit">Contribute to Library</button>
     </form>
+    <br>
 
-    <form class = "form" action = "/users/favorites" method="post">
+    <!-- <form class = "form" action = "/users/favorites" method="post">
+      <input type="hidden" name="userId" value='<%=userId%>'> 
+      <input type="hidden" name="gradientId" value='<%=gradientId%>'> 
+      <input type ="hidden" name ="_csrf" value= '<%=csrfToken%>'>
+      <input type = "hidden" name = "title" value = '<%=title%>'>
+      <input type = "hidden" name = "color1" value = '<%=color1%>'>
+      <input type = "hidden" name = "color2" value = '<%=color2%>'>
+      <input type = "hidden" name = "tags" value = '<%=tags%>'>
       <button class = "btn" type= "submit">Add to favorites</button>
-      <input type="hidden" name="userId" value='<%=user._id%>'> 
     </form>
+
+    <form class = "form" action = "/gradient" method="post">
+      <input type="hidden" name="userId" value='<%=userId%>'> 
+      <input type="hidden" name="gradientId" value='<%=gradientId%>'> 
+      <input type ="hidden" name ="_csrf" value= '<%=csrfToken%>'>
+      <input type = "hidden" name = "title" value = '<%=title%>'>
+      <input type = "hidden" name = "color1" value = '<%=color1%>'>
+      <input type = "hidden" name = "color2" value = '<%=color2%>'>
+      <input type = "hidden" name = "tags" value = '<%=tags%>'>
+      <button class = "btn" type= "submit">Delete</button>
+    </form> -->
+
+
+
+
    
 
 

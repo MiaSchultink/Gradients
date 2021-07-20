@@ -9,6 +9,7 @@
                     <il class="main-header__item"><form action="/users/logout" method="post"><input type ="hidden" name ="_csrf" value= '<%=csrfToken%>'><button class="nav_button" type="submit">Logout</button></form></il>
                     <li class="main-header__item"><a  class = "<%= path === '/gradient/create' ? 'active' : ''%>"href="/gradient/create">Gradient-creation</a></li>
                     <li class="main-header__item"><a  class = "<%= path === '/gradient/library' ? 'active' : ''%>"href="/gradient/library">Gradient-library</a></li>
+                    <li class="main-header__item"><a  class = "<%= path === '/users/favorites' ? 'active' : ''%>"href="/users/favorites">Favorites</a></li>
                     <li class="main-header__item"><a class = "<%= path === '/users/profile' ? 'active' : ''%>" href="/users/profile/<%=locals.user._id%>"> <i class="fas fa-user"></i></a></li>
                
                 <% } else { %> 

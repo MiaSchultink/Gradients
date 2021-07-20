@@ -12,10 +12,30 @@
 
       context.fillStyle = gradient;
       context.fillRect(0, 0, 500, 500);
-
-      const dt = canvas.toDataURL('image/jpeg');
-      this.href = dt;
-
-      downloadLink.addEventListener('click', download, false); 
-
     </script>
+    <div><%=tags%></div>
+
+
+    <form class = "form" action = "/users/favorites" method="post">
+      <input type="hidden" name="userId" value='<%=userId%>'> 
+      <input type="hidden" name="gradientId" value='<%=gradientId%>'> 
+      <input type ="hidden" name ="_csrf" value= '<%=csrfToken%>'>
+      <input type = "hidden" name = "title" value = '<%=title%>'>
+      <input type = "hidden" name = "color1" value = '<%=color1%>'>
+      <input type = "hidden" name = "color2" value = '<%=color2%>'>
+      <input type = "hidden" name = "tags" value = '<%=tags%>'>
+      <button class = "btn" type= "submit">Add to favorites</button>
+    </form>
+
+    <form class = "form" action = "/gradient/delete" method="post">
+      <input type="hidden" name="userId" value='<%=userId%>'> 
+      <input type="hidden" name="gradientId" value='<%=gradientId%>'> 
+      <input type ="hidden" name ="_csrf" value= '<%=csrfToken%>'>
+      <input type = "hidden" name = "title" value = '<%=title%>'>
+      <input type = "hidden" name = "color1" value = '<%=color1%>'>
+      <input type = "hidden" name = "color2" value = '<%=color2%>'>
+      <input type = "hidden" name = "tags" value = '<%=tags%>'>
+      <button class = "btn" type= "submit">Delete</button>
+    </form>
+
+    

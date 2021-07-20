@@ -24,12 +24,18 @@ const userSchema = new Schema({
             ref: 'Gradient'
         }
     ],
-    role:{
+    favorites: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Gradient'
+        }
+    ],
+    role: {
         type: String,
         required: true,
         default: 'user'
     }
-    
+
 });
 
 module.exports = mongoose.model('User', userSchema);

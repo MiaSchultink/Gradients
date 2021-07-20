@@ -1,4 +1,5 @@
 const User = require('../models/user')
+const Gradient = require('../models/gradient')
 
 exports.getAllUsers = async (req, res, next) =>{
     const users = await User.find().exec()
@@ -20,3 +21,8 @@ exports.getUser = async(req, res, next)=>{
         userId: user._id
     })
 }
+
+// exports.deleteGradient = async (req, res, next) =>{
+//     const gradient = await Gradient.findById(req.params.gradientId).exec()
+//     await gradient.remove()
+// }

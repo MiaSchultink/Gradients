@@ -1,5 +1,9 @@
 
+
 const Gradient = require('../models/gradient.js')
+const User = require('../models/user')
+
+
 
 exports.getGradientPage = (req, res, next) => {
     res.render('create-form', {
@@ -9,38 +13,78 @@ exports.getGradientPage = (req, res, next) => {
 };
 
 exports.postGradientPage = async (req, res, next) => {
-    //post gradient creatio
+    //post gradient creation page
+
+    let title = req.body.title;
+    if (title.length === 0) {
+        title = "gradient"
+    }
+    const user = await User.findById(req.session.user._id)
+
+
+    const colors = [req.body.color1, req.body.color2];
+    const tagsArray = req.body.tags.split(',');
+    const userId = user._id
+
+
+    const gradient = new Gradient({
+        title: title,
+        colors: colors,
+        tags: tagsArray,
+        userId: userId
+    });
+    const primaryColors = {
+        red: '#f00',
+        yellow: '#ff0',
+        blue: '#00f'
+    };
+
+
+    const nearestColor = require('nearest-color').from(primaryColors)
+    const color1 = nearestColor(gradient.colors[0])
+    const color2 = nearestColor(gradient.colors[1])
+
+    gradient.tags.push(color1.name, color2.name)
+
+    user.gradients.push(gradient)
+
+    await gradient.save();
+    await user.save();
+
+
+
     res.render('create-result', {
         pageTitle: 'Your gradients',
         path: '/gradient/create',
         title: req.body.title,
         color1: req.body.color1,
         color2: req.body.color2,
-        tags: req.body.tags
+        tags: req.body.tags,
+        gradientId: gradient._id,
+        userId: req.session.user._id
+
     });
 };
 
 exports.postToLibrary = async (req, res, next) => {
-    let title = req.body.title;
-    if(title.length===0){
-        title="gradient"
+    try {
+        const gradient = await Gradient.findById(req.body.gradientId).exec()
+        gradient.library = true
+        await gradient.save()
+        res.redirect('/gradient/library');
     }
-    const colors = [req.body.color1, req.body.color2];
-    const tagsArray = req.body.tags.split(',');
-    console.log("tagsArray", tagsArray);
-
-
-    const gradient = new Gradient({
-        title: title,
-        colors: colors,
-        tags: tagsArray
-    });
-    await gradient.save();
-    res.redirect('/gradient/library');
+    catch (err) {
+        console.log('add to library  err', err)
+        res.render('error', {
+            pageTitle: 'Error',
+            path: '/error',
+            message: 'Could not add to library'
+        })
+    }
 };
 
 exports.getGradientLibrary = async (req, res, next) => {
-    const gradients = await Gradient.find().exec();
+    const gradients = await Gradient.find({ library: true }).exec();
     //console.log(gradients)
     res.render('library', {
         pageTitle: 'Gradient-library',
@@ -51,14 +95,90 @@ exports.getGradientLibrary = async (req, res, next) => {
 
 exports.getGradientView = async (req, res, next) => {
     const gradientId = req.params.gradientId;
-    
+
     const gradient = await Gradient.findById(gradientId)
     res.render('gradient-view', {
         pageTitle: gradient.title,
         path: '/gradient-view',
         title: gradient.title,
         color1: gradient.colors[0],
-        color2: gradient.colors[1]
+        color2: gradient.colors[1],
+        tags: gradient.tags,
+        userId: req.session.user._id,
+        gradientId: gradient._id
     });
 };
+
+
+
+exports.searchLibrary = async (req, res, next) => {
+
+    try {
+        const query = req.body.query
+        const gradients = await Gradient.find(
+            {
+                $and: [
+                    { $text: { $search: query } },
+                    { library: true }
+                ]
+            })
+            .exec();
+
+        res.render('search', {
+            gradients: gradients,
+            path: '/gradient/search',
+            pageTitle: query,
+            count: gradients.length,
+            query: query
+        });
+    }
+    catch (err) {
+        console.log('library search err', err)
+        res.render('error', {
+            pageTitle: 'Error',
+            path: '/error',
+            message: 'Search failed'
+        })
+    }
+
+}
+
+
+
+
+exports.deleteGradient = async (req, res, next) => {
+    try {
+        const gradient = await Gradient.findById(req.body.gradientId).exec();
+        if (!gradient) { throw new Error('Gradient not found') }
+        const user = await User.findById(req.session.user._id).exec()
+
+        if (req.session.user._id.toString() === gradient.userId.toString()) {
+            user.favorites.pull(gradient._id)
+            await gradient.remove()
+            await user.save()
+            res.redirect('/gradient/library')
+        }
+        else { throw new Error('You cannot delete this gradient') }
+    }
+    catch (err) {
+        console.log('gradient delete error', err)
+        res.render('error', {
+            pageTitle: 'Error',
+            path: '/error',
+            message: 'Cannot delete this gradient'
+        })
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
 

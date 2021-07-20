@@ -4,7 +4,8 @@ const Gradient = require('../models/gradient')
 
 const crypto = require('crypto')
 const bcrypt = require('bcryptjs');
-const sgMail = require('@sendgrid/mail')
+const sgMail = require('@sendgrid/mail');
+const { accessSync } = require('fs');
 sgMail.setApiKey(process.env.API_KEY)
 
 exports.getLogIn = (req, res, next) => {
@@ -29,7 +30,7 @@ exports.postLogin = (req, res, next) => {
                     if (doMatch) {
                         req.session.isLoggedIn = true;
                         req.session.user = user;
-                        req.session.isAdmin = (user.role=='admin');
+                        req.session.isAdmin = (user.role == 'admin');
                         return req.session.save(err => {
                             console.log(err);
                             res.redirect('/');
@@ -208,12 +209,17 @@ exports.getProfile = async (req, res, next) => {
         if (userId != req.session.user._id) {
             throw new Error('Wrong profile')
         }
-        const user = await User.findById(userId);
+        const user = await User.findById(userId)
+            .populate('favorites')
+            .exec();
+        console.log(user)
+
         res.render('profile', {
             pageTitle: 'Your profile',
             path: '/users/profile',
             userId: userId,
-            user: user
+            user: user,
+            gradients: user.favorites
         });
     }
     catch (err) {
@@ -248,7 +254,7 @@ exports.postUserEdit = async (req, res, next) => {
         }
 
         const user = await User.findById(req.session.user._id).exec()
-        if(!user){
+        if (!user) {
             throw new Error('User not found')
         }
 
@@ -273,18 +279,34 @@ exports.postUserEdit = async (req, res, next) => {
 
 ///favorites 
 
-exports.addToFavorites =async (req, res , next) =>{
-    console.log('hello')
+exports.addToFavorites = async (req, res, next) => {
     const gradient = await Gradient.findById(req.body.gradientId).exec();
-    const user = await User.findById(req.body.userId).exec();
-    user.gradients.push(gradient);
+    const user = await User.findById(req.body.userId)
+        .populate('favorites')
+        .exec();
+
+    user.favorites.addToSet(gradient)
+
     await user.save();
 
-    console.log(gradient)
     res.render('favorites', {
         pageTitle: 'favorites',
         path: '/users/favorites',
-        gradients: user.gradients,
-        gradient: gradient
-    })
+        gradients: user.favorites,
+        userId: user._id
+    });
 }
+
+exports.getFavorites = async (req, res, next) => {
+    const user = await User.findById(req.session.user._id)
+        .populate('favorites')
+        .exec();
+
+    res.render('favorites', {
+        pageTitle: 'favorites',
+        path: '/users/favorites',
+        gradients: user.favorites,
+        //userId: user._id
+    });
+}
+

@@ -13,7 +13,8 @@
     "ejs": "^3.1.6",
     "express": "^4.17.1",
     "express-session": "^1.17.2",
-    "mongoose": "^5.13.0"
+    "mongoose": "^5.13.0",
+    "nearest-color": "^0.4.4"
   },
   "devDependencies": {
     "nodemon": "2.0.7"
