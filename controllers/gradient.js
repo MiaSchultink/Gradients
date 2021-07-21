@@ -17,13 +17,13 @@ exports.postGradientPage = async (req, res, next) => {
 
     let title = req.body.title;
     if (title.length === 0) {
-        title = "gradient"
+        title = "Gradient"
     }
     const user = await User.findById(req.session.user._id)
 
 
     const colors = [req.body.color1, req.body.color2];
-    const tagsArray = req.body.tags.split(',');
+    const tagsArray = req.body.tags.split(' ');
     const userId = user._id
 
 
@@ -61,7 +61,8 @@ exports.postGradientPage = async (req, res, next) => {
         color2: req.body.color2,
         tags: req.body.tags,
         gradientId: gradient._id,
-        userId: req.session.user._id
+        userId: req.session.user._id, 
+        library: gradient.library
 
     });
 };
@@ -105,7 +106,8 @@ exports.getGradientView = async (req, res, next) => {
         color2: gradient.colors[1],
         tags: gradient.tags,
         userId: req.session.user._id,
-        gradientId: gradient._id
+        gradientId: gradient._id,
+        library: gradient.library 
     });
 };
 

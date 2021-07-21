@@ -1,22 +1,11 @@
-<h1><%=title%></h1>
 
-<canvas class ="canvas" id="gradient-canvas" width="500" height="500"></canvas>
-    <script>
-
-      const canvas = document.getElementById("gradient-canvas");
-      console.log(canvas);
-      const context = canvas.getContext("2d");
-      const gradient = context.createLinearGradient(0,0, 500,0);
-      gradient.addColorStop(0, '<%=color1%>');
-      gradient.addColorStop(1, '<%=color2%>');
-
-      context.fillStyle = gradient;
-      context.fillRect(0, 0, 500, 500);
-    </script>
+<div class ="gradient-container">
+  <div class ="info-container">
+  <div class = "info-subcontainer">
+    <h1><%=title%></h1>
     <div><%=tags%></div>
-
-
-    <form class = "form" action = "/users/favorites" method="post">
+    <div class="btns-container">
+    <form class = "from" action = "/users/favorites" method="post">
       <input type="hidden" name="userId" value='<%=userId%>'> 
       <input type="hidden" name="gradientId" value='<%=gradientId%>'> 
       <input type ="hidden" name ="_csrf" value= '<%=csrfToken%>'>
@@ -26,7 +15,7 @@
       <input type = "hidden" name = "tags" value = '<%=tags%>'>
       <button class = "btn" type= "submit">Add to favorites</button>
     </form>
-
+    
     <form class = "form" action = "/gradient/delete" method="post">
       <input type="hidden" name="userId" value='<%=userId%>'> 
       <input type="hidden" name="gradientId" value='<%=gradientId%>'> 
@@ -38,4 +27,43 @@
       <button class = "btn" type= "submit">Delete</button>
     </form>
 
-    
+
+    <% if(!library) { %>
+      <form class = "form" action ="/gradient/library" method = "post" >
+        <input type = "hidden" name = "title" value = '<%=title%>'>
+        <input type = "hidden" name = "color1" value = '<%=color1%>'>
+        <input type = "hidden" name = "color2" value = '<%=color2%>'>
+        <input type = "hidden" name = "tags" value = '<%=tags%>'>
+        <input type ="hidden" name ="_csrf" value= '<%=csrfToken%>'>
+        <input type="hidden" name="gradientId" value='<%=gradientId%>'> 
+        <button class = "btn" type= "submit">Contribute to Library</button>
+      </form>
+      <% } %> 
+  </div>
+  </div>
+</div>
+  
+<canvas class ="canvas" id="gradient-canvas" ></canvas>
+</div>
+
+    <script>
+
+      const canvas = document.getElementById("gradient-canvas");
+      console.log(canvas);
+      const context = canvas.getContext("2d");
+
+     const canvasHeight = window.innerHeight/4;
+     const canvasWidth = window.innerWidth/2;
+
+      const gradient = context.createLinearGradient(0,0, 500,0);
+      gradient.addColorStop(0, '<%=color1%>');
+      gradient.addColorStop(1, '<%=color2%>');
+
+      context.fillStyle = gradient;
+      context.fillRect(0, 0, 500, 500);
+
+    </script>
+ 
+
+
+  
