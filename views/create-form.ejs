@@ -3,7 +3,12 @@
     <body>
         <link rel="stylsheet" href="../public/css/forms.css">
         <%- include('includes/navigation.ejs')%>
-            <form class="form" action="/gradient/create" method="post">
+        <%- include('includes/main-container.ejs')%>
+        <%- include('includes/container.ejs')%>
+        <div class="form-container">
+        <div class="form-subcontainer">
+            <h1>Create your gradient...</h1>
+            <form class="form" action="/gradient/view" method="post">
                 <div class="form-group">
                     <label for="title"> Gradient name</label>
                     <input id="title" class="form-input-text" type="text" name="title" 
@@ -11,7 +16,7 @@
                 </div>
                 <div class="form-group">
                     <label for="tags">Tags</label>
-                    <input id="tags" class="form-input-text" type="text" name="tags" placeholder="seperate by comas">
+                    <input id="tags" class="form-input-text" type="text" name="tags" placeholder="seperate by spaces...">
                 </div>
 
                 <div class="form-group">
@@ -22,9 +27,22 @@
                         required>
                 </div>
                 <div class = "form-group">
-                <button class="btn" type="submit">Create Gradient</button>
+                    <label for= "types">Gradient type</label>
+                    <select  id ="types" class="types" name="type">
+                       <option  value="horizontal" selected>Horizontal</option>
+                       <option value="diagonal">Diagonal</option>
+                       <option  value="vertical">Vertical</option>
+                       <option  value="radial">Radial</option>
+                    </select>
+                        
+                </div>
+
+                <div class = "form-group">
+                <button class="btn-text" type="submit">Create Gradient</button>
             </div>
             <input type ="hidden" name ="_csrf" value= '<%=csrfToken%>'>
             </form>
+        </div>
+        </div>
 
             <%- include('includes/end.ejs')%>

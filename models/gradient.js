@@ -13,6 +13,10 @@ const gradientSchema = new Schema({
     tags: {
         type: [String],
     },
+    type:{
+      type: String,
+      default: 'horizontal'
+    },
     userId:{
         type: Schema.Types.ObjectId,
         ref: 'User'

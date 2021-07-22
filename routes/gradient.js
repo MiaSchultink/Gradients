@@ -5,7 +5,7 @@ const gradientController = require('../controllers/gradient');
 const { route } = require('./users.js');
 
 router.get('/create', isAuth, gradientController.getGradientPage);
-router.post('/create',isAuth, gradientController.postGradientPage);
+router.post('/view',isAuth, gradientController.postGradientPage);
 
 router.get('/library', isAuth, gradientController.getGradientLibrary);
 

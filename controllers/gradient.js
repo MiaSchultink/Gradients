@@ -17,26 +17,34 @@ exports.postGradientPage = async (req, res, next) => {
 
     let title = req.body.title;
     if (title.length === 0) {
-        title = "Gradient"
+        title = "Gradient" 
     }
     const user = await User.findById(req.session.user._id)
 
 
     const colors = [req.body.color1, req.body.color2];
     const tagsArray = req.body.tags.split(' ');
-    const userId = user._id
+    const userId = user._id 
+    const type = req.body.type; 
 
 
     const gradient = new Gradient({
-        title: title,
+        title: title, 
+        tags: tagsArray, 
         colors: colors,
-        tags: tagsArray,
-        userId: userId
+        userId: userId,
+        type: type
     });
+
+
     const primaryColors = {
         red: '#f00',
+        orange: '#f58c02',
         yellow: '#ff0',
-        blue: '#00f'
+        green: '#00ff37',
+        blue: '#00f',
+        purple: '#b910e3',
+        pink: '#f564df'
     };
 
 
@@ -48,21 +56,26 @@ exports.postGradientPage = async (req, res, next) => {
 
     user.gradients.push(gradient)
 
-    await gradient.save();
+    console.log('title', gradient.title)
+    console.log('tags', gradient.tags)
+
+
+    await gradient.save(); 
     await user.save();
 
 
 
-    res.render('create-result', {
+    res.render('gradient-view', {
         pageTitle: 'Your gradients',
         path: '/gradient/create',
-        title: req.body.title,
+        title: gradient.title,
         color1: req.body.color1,
         color2: req.body.color2,
-        tags: req.body.tags,
+        tags: gradient.tags, 
         gradientId: gradient._id,
         userId: req.session.user._id, 
-        library: gradient.library
+        library: gradient.library,
+        type: gradient.type
 
     });
 };
@@ -97,7 +110,8 @@ exports.getGradientLibrary = async (req, res, next) => {
 exports.getGradientView = async (req, res, next) => {
     const gradientId = req.params.gradientId;
 
-    const gradient = await Gradient.findById(gradientId)
+    const gradient = await Gradient.findById(gradientId).exec()
+    console.log(gradient)
     res.render('gradient-view', {
         pageTitle: gradient.title,
         path: '/gradient-view',
@@ -107,7 +121,8 @@ exports.getGradientView = async (req, res, next) => {
         tags: gradient.tags,
         userId: req.session.user._id,
         gradientId: gradient._id,
-        library: gradient.library 
+        library: gradient.library,
+        type: gradient.type
     });
 };
 

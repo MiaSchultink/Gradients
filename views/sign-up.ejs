@@ -2,7 +2,11 @@
 
     <body>
         <%- include('includes/navigation.ejs')%>
-
+        <%- include('includes/main-container.ejs')%>
+        <%- include('includes/container.ejs')%>
+        <div class="form-container">
+            <div class="form-subcontainer">
+        <div class="form-title">Sign up</div>
         <form class = "form" action="/users/sign-up" method="post">
             <div class ="form-group" >
                 <label>Name</label>
@@ -23,9 +27,11 @@
             <input type ="hidden" name ="_csrf" value= '<%=csrfToken%>'>
 
             <div class = "form-group">
-            <button type="submit" class="btn">Sign-up</button>
+            <button type="submit" class="btn-text">Sign-up</button>
             </div>
         </form>
+    </div> 
+        </div> 
 
 
     <%- include('includes/end.ejs')%>
