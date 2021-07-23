@@ -168,8 +168,11 @@ exports.deleteGradient = async (req, res, next) => {
         const gradient = await Gradient.findById(req.body.gradientId).exec();
         if (!gradient) { throw new Error('Gradient not found') }
         const user = await User.findById(req.session.user._id).exec()
+ 
 
-        if (req.session.user._id.toString() === gradient.userId.toString()) {
+        console.log('_id', req.session.user._id)
+        console.log('id', gradient.userId)
+        if ((req.session.user._id.toString() === gradient.userId.toString())||(req.session.user.role=='admin')) {
             user.favorites.pull(gradient._id)
             await gradient.remove()
             await user.save()
