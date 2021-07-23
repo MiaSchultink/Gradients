@@ -2,14 +2,13 @@
 
   <body>
     <%- include('includes/navigation.ejs')%>
-    <%- include('includes/main-container.ejs')%>
     <%- include('includes/container.ejs')%>
       <h1>Gradient Library</h1>
-      <form action="/gradient/search" method="post">
+      <!-- <form action="/gradient/search" method="post">
         <input id="query" class='searchBar' type="search" name="query" placeholder="search for gradients...">
         <button class="btn" type="submit">Search</button>
         <input type="hidden" name="_csrf" value='<%=csrfToken%>'>
-      </form>
+      </form> -->
 
       <%-include('includes/library.ejs')%>
 

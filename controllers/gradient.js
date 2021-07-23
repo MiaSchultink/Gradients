@@ -148,6 +148,7 @@ exports.searchLibrary = async (req, res, next) => {
             count: gradients.length,
             query: query
         });
+        console.log(count)
     }
     catch (err) {
         console.log('library search err', err)
