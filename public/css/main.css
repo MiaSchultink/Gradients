@@ -8,27 +8,35 @@ body {
     align-items: right;
   
 }
+
+.top{
+    width: 100%;
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    grid-template-rows: 70px 1fr;
+    grid-template-areas: "logo search"
+                        "nav main"; 
+}
 .right-body{
     display: block;
 }
 .main{
-/* display: flex;
-justify-content: center;
-align-items: center; */
-display: block;
-padding: 1rem;
-height: 90vh; 
-width: 100vw;
+    grid-area: main;
+    padding: 20px;
 }
 .container{
 max-width: 75vw;
 }
 
 .search-container{
-    width: 100%;
-    height: 100px;
-    margin-top: 20px;
-    display: block;
+   
+    grid-area: search;
+    padding: 20px;
+}
+
+.search-form {
+    display: grid;
+    grid-template-columns: 1fr 100px;
 }
 
 /* header and navigation */
@@ -57,7 +65,8 @@ max-width: 75vw;
 
 
 .nav-bar-container{
- height: 100vh;
+ grid-area: nav; 
+ background-color: #853fe0;
 }
 
 .main-header__nav{

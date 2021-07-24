@@ -1,10 +1,21 @@
 <%- include('includes/head.ejs')%>
 
 <body>
-  <%- include('includes/navigation.ejs')%>
-  <%- include('includes/main-container.ejs')%>
-        <%- include('includes/container.ejs')%>
-    <h1>Something went wrong</h1> 
-    <p><%=message%></p>
+  <div class="top">
+
+    <%- include('includes/search2.ejs')%>
+    <%- include('includes/navigation2.ejs')%>
+
+    <div class="main">
+      <h1>Something went wrong</h1> 
+      <p><%=message%></p>
+    </div>
+    
+  </div>
+
+</body>
+
+   
+
 
     <%- include('includes/end.ejs')%>

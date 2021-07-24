@@ -1,16 +1,17 @@
 <%- include('includes/head.ejs')%>
 
   <body>
-    <%- include('includes/navigation.ejs')%>
-    <%- include('includes/container.ejs')%>
-      <h1>Gradient Library</h1>
-      <!-- <form action="/gradient/search" method="post">
-        <input id="query" class='searchBar' type="search" name="query" placeholder="search for gradients...">
-        <button class="btn" type="submit">Search</button>
-        <input type="hidden" name="_csrf" value='<%=csrfToken%>'>
-      </form> -->
+    <div class="top">
+      <%- include('includes/search2.ejs')%>
+    <%- include('includes/navigation2.ejs')%>
 
-      <%-include('includes/library.ejs')%>
+      <div class="main">
+        <h1>Gradient Library</h1>
+        <%-include('includes/library.ejs')%>
+      </div>
 
+    </div>
+
+  </body>
 
         <%- include('includes/end.ejs')%>

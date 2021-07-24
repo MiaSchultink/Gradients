@@ -1,10 +1,13 @@
 <%- include('includes/head.ejs')%>
 
     <body>
-        <%- include('includes/navigation.ejs')%>
-        <%- include('includes/main-container.ejs')%>
-        <%- include('includes/container.ejs')%>
+        <div class="top">
 
+        <%- include('includes/search2.ejs')%>
+        <%- include('includes/navigation2.ejs')%>
+    
+        <div class="main">
+        
             <form class="form" action="/users/profile/edit" method="post">
                 <div class="form-group">
                     <label>Name</label>
@@ -21,5 +24,11 @@
                 <input type ="hidden" name ="_csrf" value= '<%=csrfToken%>'>
                 <input type ="hidden" name ="userId" value= '<%=user._id%>'>
             </form>
+
+        </div>
+    
+    </div>
+  
+  </body>
 
             <%- include('includes/end.ejs')%>

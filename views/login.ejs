@@ -1,9 +1,11 @@
 <%- include('includes/head.ejs')%>
 
     <body>
-        <%- include('includes/navigation.ejs')%>
-        <%- include('includes/main-container.ejs')%>
-        <%- include('includes/container.ejs')%>
+        <div class="top">
+
+            <%- include('includes/search2.ejs')%>
+            <%- include('includes/navigation2.ejs')%>
+            <div class="main">
         <div class="form-container">
             <div class="form-subcontainer">
             <div class="form-title">Login</div>
@@ -28,5 +30,10 @@
             <a href="/users/reset">Reset Password</a>
         </div> 
            </div>
+
+        </div>
+    </div>
+
+           </body>
 
             <%- include('includes/end.ejs')%>

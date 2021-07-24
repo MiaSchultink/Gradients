@@ -1,9 +1,12 @@
 <%- include('includes/head.ejs')%>
 
     <body>
-        <%- include('includes/navigation.ejs')%>
-        <%- include('includes/main-container.ejs')%>
-        <%- include('includes/container.ejs')%>
+        <div class="top">
+
+            <%- include('includes/search2.ejs')%>
+            <%- include('includes/navigation2.ejs')%>
+        
+            <div class="main">
 
             <form class="form" action="/admin/users" method="post">
                 <div class="form-group">
@@ -24,6 +27,10 @@
                 </div>
                 <input type ="hidden" name ="_csrf" value= '<%=csrfToken%>'>
             </form>
-            <!-- <a href="/users/reset">Reset Password</a> -->
+           </div>
+    
+        </div>
+      
+      </body>
 
             <%- include('includes/end.ejs')%>
