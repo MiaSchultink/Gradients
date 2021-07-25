@@ -13,6 +13,9 @@ router.get('/view/:gradientId', isAuth, gradientController.getGradientView);
 
 router.post('/library', isAuth, gradientController.postToLibrary);
 
+router.post('/favorites', isAuth, gradientController.addToFavorites);
+router.get('/favorites', isAuth, gradientController.getFavorites);
+
 router.post('/search', gradientController.searchLibrary);
 router.post('/delete', isAuth, gradientController.deleteGradient)
 

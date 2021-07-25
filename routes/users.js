@@ -21,9 +21,9 @@ router.get('/profile/:userId',isAuth, userController.getProfile);
 router.get('/profile/edit/:userId',isAuth, userController.getUserEdit);
 router.post('/profile/edit', isAuth, userController.postUserEdit);
 
-router.post('/favorites', isAuth, userController.addToFavorites);
+// router.post('/favorites', isAuth, userController.addToFavorites);
 
-router.get('/favorites', isAuth, userController.getFavorites)
+// router.get('/favorites', isAuth, userController.getFavorites)
 
 
 module.exports = router;

@@ -1,20 +1,63 @@
 <script>
-    function makeGradient(color1, color2, canvasId){
+  function makeGradient(color1, color2, canvasId, type) {
     const canvas = document.getElementById(canvasId);
-      console.log(canvas);
-      const context = canvas.getContext("2d");
-      const gradient = context.createLinearGradient(0,0, 100,0);
+    console.log(canvas);
+    const context = canvas.getContext("2d");
+
+    function gradientDefaultSettings(gradient, context, color1, color2) {
       gradient.addColorStop(0, color1);
       gradient.addColorStop(1, color2);
-
       context.fillStyle = gradient;
-      context.fillRect(0, 0, 100, 100);
+      context.fillRect(0, 0, 300, 300);
     }
-  </script>
-   <% for(let i=0; i<gradients.length; i++){%>
-     
-     <canvas id = '<%=gradients[i]._id%>' class = "small-canvas" height="100px" width = "100px" onclick = "location.assign('/gradient/view/<%=gradients[i]._id%>')"></canvas>
-     <script>makeGradient('<%=gradients[i].colors[0]%>', '<%=gradients[i].colors[1]%>', '<%=gradients[i]._id%>')</script>
-   
-    <%}%>
+
+    let gradient;
+
+    switch (type) {
+
+      case 'horizontal':
+        gradient = context.createLinearGradient(0, 0, 300,0);
+        gradientDefaultSettings(gradient, context, color1, color2)
+        break;
+
+
+        case 'vertical':
+         gradient = context.createLinearGradient(0, 0, 0, 300);
+         gradientDefaultSettings(gradient, context, color1, color2)
+         break;
+
+         case 'diagonal':
+         gradient = context.createLinearGradient(0, 0, 300,300)
+         gradientDefaultSettings(gradient, context, color1, color2)
+         break;
+
+         case 'radial':
+         gradient = context.createRadialGradient(200, 200, 20, 200, 100, 200)
+         gradientDefaultSettings(gradient, context, color1, color2)
+         break;
+
+    }
+  }
+</script>
+<div class="flex-container">
+
+
+<% for(let i=0; i<gradients.length; i++){%>
+
+  <div class="small-container">
+    <canvas id='<%=gradients[i]._id%>' class="small-canvas" height="300px" width="300px" onclick="location.assign('/gradient/view/<%=gradients[i]._id%>')"></canvas>
+    <script>makeGradient('<%=gradients[i].colors[0]%>', '<%=gradients[i].colors[1]%>', '<%=gradients[i]._id%>','<%=gradients[i].type%>')</script>
+
+    <% if(favorites.includes(gradients[i]._id)) {%>
+      <i class="fas fa-heart"></i>
+    <% }else {%>
+      <i class="far fa-heart"></i>
+    <% } %>
+
   </div>
+
+
+<%}%>
+
+</div>
+     

@@ -277,36 +277,6 @@ exports.postUserEdit = async (req, res, next) => {
     }
 }
 
-///favorites 
 
-exports.addToFavorites = async (req, res, next) => {
-    const gradient = await Gradient.findById(req.body.gradientId).exec();
-    const user = await User.findById(req.body.userId)
-        .populate('favorites')
-        .exec();
 
-    user.favorites.addToSet(gradient)
-
-    await user.save();
-
-    res.render('favorites', {
-        pageTitle: 'favorites',
-        path: '/users/favorites',
-        gradients: user.favorites,
-        userId: user._id
-    });
-}
-
-exports.getFavorites = async (req, res, next) => {
-    const user = await User.findById(req.session.user._id)
-        .populate('favorites')
-        .exec();
-
-    res.render('favorites', {
-        pageTitle: 'favorites',
-        path: '/users/favorites',
-        gradients: user.favorites,
-        //userId: user._id
-    });
-}
 

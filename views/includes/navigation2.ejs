@@ -4,32 +4,33 @@
     <header class="main-header">
     <nav class="main-header__nav">
         <ul class="main-header__item-list">
-            <li class="main-header__item"><a class = "<%= path === '/' ? 'active' : ''%>" href="/"><i class="fas fa-home"></i></li>
+            <li class="main-header__item"><a class = "<%= path === '/' ? 'active' : ''%>" href="/"><i class="fad fa-home-lg-alt"></i> GG</li>
             
                 
                     <% if (locals.isLoggedIn == true) { %>
-                    <ul class="main-header__item-list">
-                    <li class="main-header__item"><a  class = "<%= path === '/gradient/create' ? 'active' : ''%>"href="/gradient/create">Gradient-creation</a></li>
-                    <li class="main-header__item"><a  class = "<%= path === '/gradient/library' ? 'active' : ''%>"href="/gradient/library">Gradient-library</a></li>
-                    <li class="main-header__item"><a  class = "<%= path === '/users/favorites' ? 'active' : ''%>"href="/users/favorites">Favorites</a></li>
-                    <li class="main-header__item"><a class = "<%= path === '/users/profile' ? 'active' : ''%>" href="/users/profile/<%=locals.user._id%>"> <i class="fas fa-user"></i></a></li>
-                    </ul>
-                </ul>
-                    <ul class="main-header__item-list">
-                    <il class="main-header__item"><form action="/users/logout" method="post" class="main-header__item"><input type ="hidden" name ="_csrf" value= '<%=csrfToken%>'><button class="nav_button" type="submit">Logout</button></form></il>
-                    <% if (locals.isAdmin == true) { %>
-                        <li class="main-header__item"><a  class = "<%= path === '/admin/users' ? 'active' : ''%>"href="/admin/users">Users</a></li>
-                    <% } %>
-                </ul> 
+                    <!-- <ul class="main-header__item-list"> -->
+                    <li class="main-header__item"><a  class = "<%= path === '/gradient/create' ? 'active' : ''%>"href="/gradient/create"><i class="fad fa-pencil-paintbrush"></i> New</a></li>
+                    <li class="main-header__item"><a  class = "<%= path === '/gradient/library' ? 'active' : ''%>"href="/gradient/library"><i class="fad fa-books"></i> Library</a></li>
+                    <li class="main-header__item"><a  class = "<%= path === '/gradient/favorites' ? 'active' : ''%>"href="/gradient/favorites"><i class="fas fa-heart"></i> Favorites</a></li>
+                    <li class="main-header__item"><a class = "<%= path === '/users/profile' ? 'active' : ''%>" href="/users/profile/<%=locals.user._id%>"><i class="fad fa-user"></i> Profile</a></li>
+                    <!-- </ul> -->
+                <!-- </ul> -->
+                    <!-- <ul class="main-header__item-list"> -->
+                        <% if (locals.isAdmin == true) { %>
+                            <li class="main-header__item"><a  class = "<%= path === '/admin/users' ? 'active' : ''%>"href="/admin/users"><i class="fad fa-users"></i> Users</a></li>
+                        <% } %>
+                    <il class="main-header__item"><form action="/users/logout" method="post" class="main-header__item"><input type ="hidden" name ="_csrf" value= '<%=csrfToken%>'><button class="nav_button" type="submit"><i class="fad fa-user-slash"></i> Logout</button></form></il>
+                    
+                <!-- </ul>  -->
             
                 <% } else { %> 
-                    <ul class="main-header__item-list">
-                    <li class="main-header__item"><a  class = "<%= path === '/users/login' ? 'active' : ''%>"href="/users/login">Login</a></li>
-                    <li class="main-header__item"><a class = "<%= path === '/users/sign-up' ? 'active' : ''%>" href="/users/sign-up">Sign-up</a></li>
-                    </ul> 
+                    <!-- <ul class="main-header__item-list"> -->
+                    <li class="main-header__item"><a  class = "<%= path === '/users/login' ? 'active' : ''%>"href="/users/login"><i class="fad fa-user"></i> Login</a></li>
+                    <li class="main-header__item"><a class = "<%= path === '/users/sign-up' ? 'active' : ''%>" href="/users/sign-up"><i class="fad fa-user-plus"></i> Sign-up</a></li>
+                    <!-- </ul>  -->
                     <% } %> 
 
-        
+        </ul>
     </nav>
     </header>
 

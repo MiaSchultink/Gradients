@@ -71,7 +71,7 @@ app.use('/gradient', gradientRoutes);
 app.use('/admin', adminController); 
 
 app.get('/', (req, res, next) => {
-    console.log('Loggedin', req.session.isLoggedIn)
+    // console.log('Loggedin', req.session.isLoggedIn)
     res.status(200).render('index', {
         pageTitle: 'Home page',
         path: '/'
