@@ -307,7 +307,8 @@ exports.download = async (req, res, next) => {
     const browser = await puppeteer.launch({
         headless: true,
         args: [
-            '--start-maximized'
+            '--start-maximized',
+            '--no-sandbox'
         ],
         defaultViewport: null
     });
