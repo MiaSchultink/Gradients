@@ -308,7 +308,8 @@ exports.download = async (req, res, next) => {
         headless: true,
         args: [
             '--start-maximized',
-            '--no-sandbox'
+            '--no-sandbox',
+            '--disable-setuid-sandbox'
         ],
         defaultViewport: null
     });
