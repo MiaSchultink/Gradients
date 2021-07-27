@@ -45,6 +45,11 @@
               <button class="btn" type="submit"><i class="fas fa-trash-alt delete"></i></button>
             </form>
 
+            <form class="download-form" action="/gradient/griffin" method="post">
+              <input type="hidden" name="_csrf" value='<%=csrfToken%>'>
+            <button class="download" type="submit"><i class="fad fa-download"></i></button>
+          </form>
+
 
             <% if(!library) { %>
               <form class="form" action="/gradient/library" method="post">
@@ -85,10 +90,6 @@
   switch ('<%=type%>') {
     case 'horizontal':
       gradient = context.createLinearGradient(0, 0, 500, 0);
-      // gradient.addColorStop(0, '<%=color1%>');
-      // gradient.addColorStop(1, '<%=color2%>');
-      // context.fillStyle = gradient;
-      // context.fillRect(0, 0, 500, 500);
       createGradient(gradient, context, '<%=color1%>', '<%=color2%>')
 
       break;
@@ -96,28 +97,16 @@
 
     case 'vertical':
       gradient = context.createLinearGradient(0, 0, 0, 500)
-      // gradient.addColorStop(0, '<%=color1%>');
-      // gradient.addColorStop(1, '<%=color2%>');
-      // context.fillStyle = gradient;
-      // context.fillRect(0, 0, 500, 500);
       createGradient(gradient, context, '<%=color1%>', '<%=color2%>')
       break;
 
     case 'radial':
       gradient = context.createRadialGradient(300, 300, 30, 300, 300, 300)
-      // gradient.addColorStop(0, '<%=color1%>');
-      // gradient.addColorStop(1, '<%=color2%>');
-      // context.fillStyle = gradient;
-      // context.fillRect(0, 0, 500, 500);
       createGradient(gradient, context, '<%=color1%>', '<%=color2%>')
       break;
 
     case 'diagonal':
       gradient = context.createLinearGradient(0, 0, 500, 500)
-      // gradient.addColorStop(0, '<%=color1%>');
-      // gradient.addColorStop(1, '<%=color2%>');
-      // context.fillStyle = gradient;
-      // context.fillRect(0, 0, 500, 500);
       createGradient(gradient, context, '<%=color1%>', '<%=color2%>')
       break;
 

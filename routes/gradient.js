@@ -16,8 +16,14 @@ router.post('/library', isAuth, gradientController.postToLibrary);
 router.post('/favorites', isAuth, gradientController.addToFavorites);
 router.get('/favorites', isAuth, gradientController.getFavorites);
 
+router.post('/library',isAuth, gradientController.libraryFavorite);
+
 router.post('/search', gradientController.searchLibrary);
 router.post('/delete', isAuth, gradientController.deleteGradient)
+
+// router.post('/download', gradientController.download); 
+router.post('/griffin', gradientController.girffin);
+
 
 
 module.exports = router;

@@ -124,11 +124,13 @@ padding: 0;
 color:white;
 background: none;
 font-size: 18px;
+
 /* margin: 10px; */
 
 }
 .nav_button:hover{
-    border-bottom:solid 2px white;
+    color:#4a018a; 
+   border-bottom: solid 2px #BC6FF1 ;
 }
 
 /* forms stuff */
@@ -203,8 +205,8 @@ input,label{
 input{
     height: 30px;
     width: 75vw;
-    border-radius: 5px;
-    border-color: black;
+    border-radius: 30px;
+    border: solid 2px black;
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
@@ -215,33 +217,36 @@ input [type="search"]{
     height: 30px;
     width: 50vw;
     border-radius: 5px;
-    border-color: black;
+    /* border-color: black; */
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
     display: inline-block;
 }
-input[type = color]{
+input[type = "color"]{
     height: 30px;
     width: 50px;
-    border-radius: 5px;
+    border-radius: 10px;
     outline:none;
     outline-width: 0;
-    -webkit-appearance: none;
+    /* -webkit-appearance: none; */
 	border: none;
-    box-sizing: border-box;
+    border-style: none;
+    /* box-sizing: border-box; */
 }
 input[type="color"]::-webkit-color-swatch-wrapper {
 	padding: 0;
 }
 input[type="color"]::-webkit-color-swatch {
 	border: none;
+    border-radius: 15px;
 }
 
 select{
     height: 30px;
     width: 75vw;
-    border: solid black;
+    border-radius: 30px;
+    border: solid 2px black;
 }
 
 /* gradient canvas */

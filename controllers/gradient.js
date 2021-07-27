@@ -2,6 +2,7 @@
 
 const Gradient = require('../models/gradient.js')
 const User = require('../models/user')
+const puppeteer = require('puppeteer');
 
 
 
@@ -144,6 +145,18 @@ exports.getGradientView = async (req, res, next) => {
 exports.searchLibrary = async (req, res, next) => {
 
     try {
+        let favorites;
+        if (req.session.user) {
+            const user = await User.findById(req.session.user._id).exec()
+            favorites = favorites = user.favorites.map(favorite => { return favorite._id })
+
+        }
+        else {
+            favorites = [];
+
+
+        }
+
         const query = req.body.query
         const gradients = await Gradient.find(
             {
@@ -154,14 +167,17 @@ exports.searchLibrary = async (req, res, next) => {
             })
             .exec();
 
-        res.render('search', {
+
+
+
+        res.render('library', {
             gradients: gradients,
             path: '/gradient/search',
             pageTitle: query,
             count: gradients.length,
-            query: query
+            query: query,
+            favorites: favorites
         });
-        console.log(count)
     }
     catch (err) {
         console.log('library search err', err)
@@ -215,7 +231,7 @@ exports.addToFavorites = async (req, res, next) => {
         .exec();
 
     const favorites = user.favorites.map(favorite => { return favorite._id })
-    console.log("length before", favorites.length)
+    // console.log("length before", favorites.length)
 
     if (favorites.includes(gradient._id)) {
         user.favorites.pull(gradient._id)
@@ -228,7 +244,7 @@ exports.addToFavorites = async (req, res, next) => {
 
     await user.save();
 
-    console.log("length after", favorites.length)
+    // console.log("length after", favorites.length)
     res.status(200).redirect('/gradient/view/' + gradient._id)
 
 }
@@ -250,6 +266,82 @@ exports.getFavorites = async (req, res, next) => {
         //userId: user._id
     });
 }
+
+
+exports.libraryFavorite = async (req, res, next) => {
+    const gradient = await Gradient.findById(req.body.gradientId).exec();
+    const user = await User.findById(req.session.user._id)
+        .populate('favorites')
+        .exec();
+    const favorites = user.favorites.map(favorite => { return favorite._id })
+
+
+    if (favorites.includes(gradient._id)) {
+        user.favorites.pull(gradient._id)
+    }
+    else {
+
+        user.favorites.addToSet(gradient._id)
+
+    }
+
+    await user.save();
+
+
+    res.render('library', {
+        userId: user._id,
+        gradientId: gradient._id
+    })
+
+};
+
+exports.download = (req, res, next) => {
+    res.download('public/images/logo2.png');
+}
+
+
+exports.girffin = async (req, res, next) => {
+
+
+    const gradient = await Gradient.findById(gradientId).exec()
+
+
+    const browser = await puppeteer.launch({ 
+        headless: false
+    });
+    const page = await browser.newPage();
+
+    const options = {
+       color1: gradient.colors[0],
+       color2: gradient.colors[1], 
+       type: gradient.type
+    }
+    const result = await page.evaluate((options) => {
+
+        function createGradient(gradient, context, color1, color2) {
+            gradient.addColorStop(0, '<%=color1%>');
+            gradient.addColorStop(1, '<%=color2%>');
+            context.fillStyle = gradient;
+            context.fillRect(0, 0, 500, 500);
+        }
+
+        const canvas = document.createElement('canvas')
+        document.body.appendChild(canvas)
+        canvas.id = "gradient-canvas"
+        canvas.height = "500"
+        canvas.width ="500"
+        const context = canvas.getContext("2d");
+
+    }, options)
+    console.log(result)
+    res.end()
+    //await browser.close();
+
+}
+
+
+
+
 
 
 

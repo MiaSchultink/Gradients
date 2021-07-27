@@ -48,11 +48,12 @@
     <canvas id='<%=gradients[i]._id%>' class="small-canvas" height="300px" width="300px" onclick="location.assign('/gradient/view/<%=gradients[i]._id%>')"></canvas>
     <script>makeGradient('<%=gradients[i].colors[0]%>', '<%=gradients[i].colors[1]%>', '<%=gradients[i]._id%>','<%=gradients[i].type%>')</script>
 
-    <% if(favorites.includes(gradients[i]._id)) {%>
-      <i class="fas fa-heart"></i>
-    <% }else {%>
-      <i class="far fa-heart"></i>
-    <% } %>
+    
+        <% if(favorites.includes(gradients[i]._id)){%>
+          <i id ="heart" class="fas fa-heart favorite"></i></button>
+        <% } else{%> 
+         <i id ="heart" class="far fa-heart favorite"></i></button>
+         <% } %> 
 
   </div>
 
