@@ -300,12 +300,12 @@ exports.libraryFavorite = async (req, res, next) => {
 
 };
 
-exports.download = (req, res, next) => {
-    res.download('public/images/logo2.png');
-}
+// exports.download = (req, res, next) => {
+//     res.download('public/images/logo2.png');
+// }
 
 
-exports.girffin = async (req, res, next) => {
+exports.download = async (req, res, next) => {
     const gradient = await Gradient.findById(req.body.gradientId).exec()
 
 

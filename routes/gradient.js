@@ -22,7 +22,7 @@ router.post('/search', gradientController.searchLibrary);
 router.post('/delete', isAuth, gradientController.deleteGradient)
 
 // router.post('/download', gradientController.download); 
-router.post('/griffin', gradientController.girffin);
+router.post('/download', isAuth, gradientController.download);
 
 
 
