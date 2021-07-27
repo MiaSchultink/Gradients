@@ -45,12 +45,6 @@
               <button class="btn" type="submit"><i class="fas fa-trash-alt delete"></i></button>
             </form>
 
-            <form class="download-form" action="/gradient/griffin" method="post">
-              <input type="hidden" name="_csrf" value='<%=csrfToken%>'>
-            <button class="download" type="submit"><i class="fad fa-download"></i></button>
-          </form>
-
-
             <% if(!library) { %>
               <form class="form" action="/gradient/library" method="post">
                 <input type="hidden" name="title" value='<%=title%>'>
@@ -67,6 +61,28 @@
     <!-- </div> -->
   </div>
 
+  <div class="download-container">
+
+  <form class="download-form" action="/gradient/griffin" method="post">
+           
+    <label class="dwnl-label" for="width"> Width </label>
+    <input  width = "100px" class="text-small" id="width" class="form-input-text" type="text" name="width" 
+        placeholder="enter width" value="500">
+  
+    <label class="dwnl-label" for= "aspectRatio">Aspect ratio</label>
+    <select width = "100px" class="text-small" id="aspectRatio" name="aspectRatio">
+        <option value="0.75">4X3</option>
+        <option value="0.5625">16X9</option>
+        <option value="1">1X1</option>
+    </select>
+  
+  <input type="hidden" name="gradientId" value='<%=gradientId%>'>
+  <input type="hidden" name="_csrf" value='<%=csrfToken%>'>
+  <button class="btn" type="submit"><i class="fad fa-download"></i></button>
+  </form>
+
+</div>
+
   <canvas class="canvas" id="gradient-canvas" height="500" width="500"></canvas>
   
 </div>
@@ -79,8 +95,8 @@
 
 
   function createGradient(gradient, context, color1, color2) {
-    gradient.addColorStop(0, '<%=color1%>');
-    gradient.addColorStop(1, '<%=color2%>');
+    gradient.addColorStop(0,  color1);
+    gradient.addColorStop(1, color2);
     context.fillStyle = gradient;
     context.fillRect(0, 0, 500, 500);
 
@@ -116,3 +132,4 @@
 
 
 </script>
+

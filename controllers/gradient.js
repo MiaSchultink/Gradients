@@ -27,6 +27,11 @@ exports.postGradientPage = async (req, res, next) => {
     const tagsArray = req.body.tags.split(' ');
     const userId = user._id
     const type = req.body.type;
+    const width = req.body.width;
+    const aspectRatio = req.body.aspectRatio;
+    const height = width * aspectRatio;
+    console.log(height)
+
 
 
     const gradient = new Gradient({
@@ -34,7 +39,7 @@ exports.postGradientPage = async (req, res, next) => {
         tags: tagsArray,
         colors: colors,
         userId: userId,
-        type: type
+        type: type,
     });
 
 
@@ -301,41 +306,89 @@ exports.download = (req, res, next) => {
 
 
 exports.girffin = async (req, res, next) => {
+    const gradient = await Gradient.findById(req.body.gradientId).exec()
 
 
-    const gradient = await Gradient.findById(gradientId).exec()
-
-
-    const browser = await puppeteer.launch({ 
-        headless: false
+    const browser = await puppeteer.launch({
+        headless: true,
+        args: [
+            '--start-maximized'
+        ],
+        defaultViewport: null
     });
     const page = await browser.newPage();
 
+    const width = req.body.width;
+
+    const aspectRatio = req.body.aspectRatio;
+    const height = width * aspectRatio;
+
     const options = {
-       color1: gradient.colors[0],
-       color2: gradient.colors[1], 
-       type: gradient.type
+        color1: gradient.colors[0],
+        color2: gradient.colors[1],
+        type: gradient.type,
+        width: width,
+        height: height
     }
-    const result = await page.evaluate((options) => {
+    await page.evaluate(async options => {
 
         function createGradient(gradient, context, color1, color2) {
-            gradient.addColorStop(0, '<%=color1%>');
-            gradient.addColorStop(1, '<%=color2%>');
+            gradient.addColorStop(0, options.color1);
+            gradient.addColorStop(1, options.color2);
             context.fillStyle = gradient;
             context.fillRect(0, 0, 500, 500);
         }
 
         const canvas = document.createElement('canvas')
         document.body.appendChild(canvas)
+        document.body.style.margin = 0
+
+        document.body.style.width = options.width + 'px';
+        document.body.style.height = options.height + 'px';
+
         canvas.id = "gradient-canvas"
-        canvas.height = "500"
-        canvas.width ="500"
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
+        canvas.height = 500
+        canvas.width = 500
         const context = canvas.getContext("2d");
 
+        let gradient;
+        switch (options.type) {
+            case 'horizontal':
+                gradient = context.createLinearGradient(0, 0, 500, 0);
+                createGradient(gradient, context, options.color1, options.color2)
+                break;
+
+            case 'vertical':
+                gradient = context.createLinearGradient(0, 0, 0, 500)
+                createGradient(gradient, context, options.color1, options.color2)
+                break;
+
+            case 'radial':
+                gradient = context.createRadialGradient(300, 300, 30, 300, 300, 300)
+                createGradient(gradient, context, options.color1, options.color2)
+                break;
+
+            case 'diagonal':
+                gradient = context.createLinearGradient(0, 0, 500, 500)
+                createGradient(gradient, context, options.color1, options.color2)
+                break;
+
+        }
+
+
     }, options)
-    console.log(result)
-    res.end()
-    //await browser.close();
+    await page.screenshot({
+        path: 'gradient.png',
+        clip: {
+            x: 0,
+            y: 0,
+            width: +options.width,
+            height: +options.height
+        }
+    });
+    res.download('gradient.png')
 
 }
 

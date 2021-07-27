@@ -166,6 +166,20 @@ button .fas, button .far{
     color: black;
 }
 
+/* .download-form{
+    height: 45px;
+    width: 45px;
+    font-size: 40px;
+    color: black;
+}
+.download-form{
+    color:#4a018a; 
+} */
+
+.download-form{
+    display: flex;
+}
+
 .favorite:hover{
 color:#4a018a; 
 }
@@ -212,6 +226,8 @@ input{
     box-sizing: border-box;
     display: inline-block;
 }
+
+
 
 input [type="search"]{
     height: 30px;
@@ -319,6 +335,19 @@ select{
 
 .small-canvas{
     border-radius: 9px;
+}
+
+
+.text-small{
+    width: 100px;
+}
+
+.dwnl-label{
+    color: black;
+    font-size: 15px;
+}
+.download-container{
+    display: flex;
 }
 
 
