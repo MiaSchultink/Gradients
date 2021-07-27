@@ -374,8 +374,8 @@ exports.download = async (req, res, next) => {
 
 
     }, options)
-    await page.screenshot({
-        path: 'gradient.png',
+    const buffer = await page.screenshot({
+        //path: 'gradient.png',
         clip: {
             x: 0,
             y: 0,
@@ -383,7 +383,9 @@ exports.download = async (req, res, next) => {
             height: +options.height
         }
     });
-    res.download('gradient.png')
+    res.setHeader('Content-Disposition', 'attachment; filename="gradient.png"')
+    res.setHeader('Contenbt-Type', 'image/png')
+    res.send(buffer)
    
 
 }

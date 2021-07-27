@@ -346,6 +346,9 @@ select{
 .small-canvas{
     border-radius: 9px;
 }
+.small-canvas:hover{
+    cursor: pointer; 
+}
 
 
 .text-small{
