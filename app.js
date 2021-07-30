@@ -33,9 +33,12 @@ const userRoutes = require('./routes/users')
 const adminController = require('./routes/admin')
 const gradientRoutes = require('./routes/gradient')
 const controller404 = require('./controllers/error');
+const favicon = require('serve-favicon');
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
+// app.use(favicon(path.join(__dirname,'favicon.ico')));
+app.use(favicon(__dirname + '/public/images/favicon.ico'));
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
@@ -70,13 +73,21 @@ app.use('/users', userRoutes);
 app.use('/gradient', gradientRoutes);
 app.use('/admin', adminController); 
 
-app.get('/', (req, res, next) => {
+
+  app.get('/', (req, res, next) => {
+    if(!req.session.user){
     // console.log('Loggedin', req.session.isLoggedIn)
     res.status(200).render('index', {
-        pageTitle: 'Home page',
+        pageTitle: 'Home',
         path: '/'
     });
+  }
+  else{
+    res.redirect('/gradient/library')
+  }
 });
+
+
 
 app.use(controller404.get404);
 

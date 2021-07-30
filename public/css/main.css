@@ -364,5 +364,66 @@ select{
 }
 
 
+.home{
+    display: flex;
+    padding: none;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    background-image: linear-gradient( to top left, #8422e0, #e09a22);
+ 
+
+    height: 100%;
+    width: 100%;
+    /* opacity: 0.7; */
+}
+
+.home-title{
+    font-size: 50px;
+    font-weight: bold;
+    opacity: 1.0;
+}
+
+.link-container{
+    border: 2px solid #853fe0; 
+    height: 40px;
+    width: 100px;
+}
+
+.link-btn{
+    background: none;
+        padding: 0;
+        font: inherit;
+        cursor: pointer;
+        outline: inherit;
+        font-size: 15px;
+    color: #853fe0; 
+    text-decoration: none;
+    border: 2px solid #853fe0; 
+    height: 40px;
+    width: 100px;
+    border-radius: 20px;
+    margin: 5px;
+}
+.link-btn:hover{
+    border-color: #4a018a;
+}
+.link{
+    color:#8422e0;
+    text-decoration: none;
+}
+.link:hover{
+  color: #4a018a;
+}
+
+.lg-btns-container{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+
+
 
 

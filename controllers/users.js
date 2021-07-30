@@ -219,7 +219,8 @@ exports.getProfile = async (req, res, next) => {
             path: '/users/profile',
             userId: userId,
             user: user,
-            gradients: user.favorites
+            gradients: user.favorites, 
+            favorites: user.favorites
         });
     }
     catch (err) {
