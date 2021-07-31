@@ -12,6 +12,7 @@
         </div>
         <% } %>
       </div>
+      <div class="creator"><%=creator%></div>
         <script>
           function favorite(){
         const heartIcon  = document.getElementById('heart')
@@ -27,9 +28,9 @@
               <input type="hidden" name="_csrf" value='<%=csrfToken%>'>
               <button class="btn" type="submit">
                 <% if(favorites.includes(gradientId)){%>
-                  <i id ="heart" class="fas fa-heart favorite"></i></button>
+                  <i id ="heart" class="fas fa-heart icon big"></i></button>
                 <% } else{%> 
-                 <i id ="heart" class="far fa-heart favorite"></i></button>
+                 <i id ="heart" class="far fa-heart icon big"></i></button>
                  <% } %> 
             </form>
 
@@ -42,7 +43,7 @@
               <input type="hidden" name="color1" value='<%=color1%>'>
               <input type="hidden" name="color2" value='<%=color2%>'>
               <input type="hidden" name="tags" value='<%=tags%>'>
-              <button class="btn" type="submit"><i class="fas fa-trash-alt delete"></i></button>
+              <button class="btn" type="submit"><i class="fas fa-trash-alt delete icon big"></i></button>
             </form>
 
             <% if(!library) { %>
@@ -82,7 +83,7 @@
     <div class = "form-group">
      <input type="hidden" name="gradientId" value='<%=gradientId%>'>
      <input type="hidden" name="_csrf" value='<%=csrfToken%>'>
-     <button class="btn-download" type="submit"><i class="fad fa-download"></i></button>
+     <button class="btn-download" type="submit"><i class="fad fa-download icon big"></i></button>
   </div>
 
     </form>

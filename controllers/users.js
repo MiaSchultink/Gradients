@@ -212,7 +212,9 @@ exports.getProfile = async (req, res, next) => {
         const user = await User.findById(userId)
             .populate('favorites')
             .exec();
-        console.log(user)
+
+        const favorites = user.favorites.map(favorite => { return favorite._id })
+
 
         res.render('profile', {
             pageTitle: 'Your profile',
@@ -220,7 +222,7 @@ exports.getProfile = async (req, res, next) => {
             userId: userId,
             user: user,
             gradients: user.favorites, 
-            favorites: user.favorites
+            favorites: favorites
         });
     }
     catch (err) {
@@ -276,6 +278,23 @@ exports.postUserEdit = async (req, res, next) => {
             message: 'Could not edit profile'
         })
     }
+}
+
+
+exports.getPosts  = async(req, res, next) =>{
+    const user  = await User.findById(req.session.user._id).populate('gradients').exec()
+    const posts = user.gradients
+    const favorites = user.favorites.map(favorite => { return favorite._id })
+
+
+    res.render('posts',{
+        pageTitle: 'posts',
+        path: '/users/posts',
+        gradients: posts,
+        favorites: favorites,
+        userId: user._id
+    })
+    
 }
 
 

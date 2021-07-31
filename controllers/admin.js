@@ -12,7 +12,7 @@ exports.getAllUsers = async (req, res, next) =>{
 }
 
 exports.getUser = async(req, res, next)=>{
-    console.log(req.params)
+    // console.log(req.params)
     const user = await User.findById(req.params.userId).exec()
     res.render('admin-user-view', {
         pageTitle: 'Admin User View',

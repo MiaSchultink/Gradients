@@ -76,7 +76,7 @@ app.use('/admin', adminController);
 
   app.get('/', (req, res, next) => {
     if(!req.session.user){
-    // console.log('Loggedin', req.session.isLoggedIn)
+ 
     res.status(200).render('index', {
         pageTitle: 'Home',
         path: '/'

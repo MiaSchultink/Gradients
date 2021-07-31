@@ -3,6 +3,8 @@
 const Gradient = require('../models/gradient.js')
 const User = require('../models/user')
 const puppeteer = require('puppeteer');
+const gradient = require('../models/gradient.js');
+const user = require('../models/user');
 
 
 
@@ -30,7 +32,7 @@ exports.postGradientPage = async (req, res, next) => {
     const width = req.body.width;
     const aspectRatio = req.body.aspectRatio;
     const height = width * aspectRatio;
-    console.log(height)
+
 
 
 
@@ -62,9 +64,6 @@ exports.postGradientPage = async (req, res, next) => {
 
     user.gradients.push(gradient)
 
-    // console.log('title', gradient.title)
-    // console.log('tags', gradient.tags)
-
     const favorites = user.favorites.map(favorite => { return favorite._id })
 
 
@@ -84,7 +83,8 @@ exports.postGradientPage = async (req, res, next) => {
         userId: req.session.user._id,
         library: gradient.library,
         type: gradient.type,
-        favorites: favorites
+        favorites: favorites,
+        creator: userId
 
     });
 };
@@ -118,7 +118,7 @@ exports.getGradientLibrary = async (req, res, next) => {
         path: '/gradient/library',
         gradients: gradients,
         favorites: favorites,
-        type: type
+        type: type,
     })
 };
 
@@ -128,8 +128,11 @@ exports.getGradientView = async (req, res, next) => {
 
     const favorites = user.favorites.map(favorite => { return favorite._id })
 
-    const gradient = await Gradient.findById(gradientId).exec()
-    console.log(gradient)
+    const gradient = await Gradient.findById(gradientId)
+        .populate('userId')
+        .exec()
+    const creator = gradient.userId
+
     res.render('gradient-view', {
         pageTitle: gradient.title,
         path: '/gradient-view',
@@ -141,7 +144,8 @@ exports.getGradientView = async (req, res, next) => {
         gradientId: gradient._id,
         library: gradient.library,
         type: gradient.type,
-        favorites: favorites
+        favorites: favorites, 
+        creator: creator.name
     });
 };
 
@@ -158,9 +162,8 @@ exports.searchLibrary = async (req, res, next) => {
         }
         else {
             favorites = [];
-
-
         }
+
 
         const query = req.body.query
         const gradients = await Gradient.find(
@@ -181,7 +184,8 @@ exports.searchLibrary = async (req, res, next) => {
             pageTitle: query,
             count: gradients.length,
             query: query,
-            favorites: favorites
+            favorites: favorites,
+
         });
     }
     catch (err) {
@@ -205,9 +209,6 @@ exports.deleteGradient = async (req, res, next) => {
         const user = await User.findById(req.session.user._id).exec()
 
 
-        // console.log('_id', req.session.user._id) 
-        // console.log('id', gradient.userId)
-
         if ((req.session.user._id.toString() === gradient.userId.toString()) || (req.session.user.role == 'admin')) {
             user.favorites.pull(gradient._id)
             await gradient.remove()
@@ -230,13 +231,15 @@ exports.deleteGradient = async (req, res, next) => {
 
 
 exports.addToFavorites = async (req, res, next) => {
+    console.log('GradientId', req.body.gradientId)
     const gradient = await Gradient.findById(req.body.gradientId).exec();
-    const user = await User.findById(req.body.userId)
-        .populate('favorites')
-        .exec();
+
+    // const user = await User.findById(req.body.userId)
+    //     .populate('favorites')
+    //     .exec();
+    const user = await User.findById(req.session.user._id).populate('favorites').exec()
 
     const favorites = user.favorites.map(favorite => { return favorite._id })
-    // console.log("length before", favorites.length)
 
     if (favorites.includes(gradient._id)) {
         user.favorites.pull(gradient._id)
@@ -249,7 +252,6 @@ exports.addToFavorites = async (req, res, next) => {
 
     await user.save();
 
-    // console.log("length after", favorites.length)
     res.status(200).redirect('/gradient/view/' + gradient._id)
 
 }
@@ -268,7 +270,6 @@ exports.getFavorites = async (req, res, next) => {
         path: '/users/favorites',
         gradients: user.favorites,
         favorites: favorites,
-        //userId: user._id
     });
 }
 
@@ -292,11 +293,7 @@ exports.libraryFavorite = async (req, res, next) => {
 
     await user.save();
 
-
-    res.render('library', {
-        userId: user._id,
-        gradientId: gradient._id
-    })
+    res.redirect('/gradient/library')
 
 };
 
@@ -388,9 +385,12 @@ exports.download = async (req, res, next) => {
     res.setHeader('Content-Disposition', 'attachment; filename="gradient.png"')
     res.setHeader('Contenbt-Type', 'image/png')
     res.send(buffer)
-   
+
 
 }
+
+
+
 
 
 

@@ -53,14 +53,6 @@ max-width: 75vw;
     gap: 10px;
 }
 
-/* header and navigation */
-
-/* .main-header {
-    width: 100%;
-    height: 56px;
-    background-color: #853fe0;
-
-} */
 
 
 .mian-header{
@@ -68,15 +60,6 @@ max-width: 75vw;
     width: 200px;
     background-color: #853fe0;
 }
-
-/* .main-header__nav {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-} */
-
 
 .nav-bar-container{
  grid-area: nav; 
@@ -159,7 +142,9 @@ font-size: 18px;
 .btn-text:hover{
     background-color:  #52057B; ;
 }
-button .fas, button .far{
+
+
+.icon.big{
     height: 45px;
     width: 45px;
     font-size: 40px;
@@ -423,6 +408,18 @@ select{
     align-items: center;
 }
 
+.like{
+       background: none;
+        padding: 0;
+        font: inherit;
+        cursor: pointer;
+        outline: inherit;
+        border: none;
+    height: 20px;
+    width: 20px;
+    font-size: 15px;
+    
+}
 
 
 

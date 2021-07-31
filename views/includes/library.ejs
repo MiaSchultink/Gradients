@@ -48,12 +48,21 @@
     <canvas id='<%=gradients[i]._id%>' class="small-canvas" height="300px" width="300px" onclick="location.assign('/gradient/view/<%=gradients[i]._id%>')"></canvas>
     <script>makeGradient('<%=gradients[i].colors[0]%>', '<%=gradients[i].colors[1]%>', '<%=gradients[i]._id%>','<%=gradients[i].type%>')</script>
 
+
+    <form class="like-form" action = "/gradient/library/favorites" method="post">
     
         <% if(favorites.includes(gradients[i]._id)){%>
-          <i id ="heart" class="fas fa-heart favorite"></i></button>
+         <button class="like" type="submit"><i id ="heart" class="fas fa-heart favorite small"></i></button>
         <% } else{%> 
-         <i id ="heart" class="far fa-heart favorite"></i></button>
+          <button class="like" type="submit"> <i id ="heart" class="far fa-heart favorite small"></i></button>
          <% } %> 
+         <input type="hidden" name="_csrf" value='<%=csrfToken%>'>
+         <input type="hidden" name="gradientId" value='<%=gradients[i]._id%>'>
+
+         
+         <div>creator:<%=gradients[i].userId%></div>
+    
+        </form>
 
   </div>
 
