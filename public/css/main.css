@@ -17,6 +17,17 @@ body {
     grid-template-areas: "logo search"
                         "nav main"; 
 }
+
+@media screen and (max-width: 480px){
+    .top{
+        width: 100%;
+        display: grid;
+        grid-template-columns: 200px 1fr;
+        grid-template-rows: auto 1fr;
+        grid-template-areas: "logo nav" 
+                              "search main"
+    }
+}
 .right-body{
     display: block;
 }
@@ -315,6 +326,43 @@ select{
 .profile-block{
  display:block;
 
+}
+
+li{
+    list-style-type: none;
+}
+ul{
+    list-style-type: none;
+}
+
+.profile-nav-container{
+    display: flex;
+    justify-content: space-evenly;
+}
+.profile-nav-item a {
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+    
+}
+
+.profile-a{
+    width: 100%;
+    height: 40px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px;
+    background-color:#853fe0;
+    border:none;
+}
+
+.profile-a:hover{
+    background-color: #4a018a;
+}
+.profile-a:focus{
+    background-color: #4a018a;
 }
 
 .small-container{

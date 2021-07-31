@@ -211,6 +211,7 @@ exports.getProfile = async (req, res, next) => {
         }
         const user = await User.findById(userId)
             .populate('favorites')
+            .populate('gradients')
             .exec();
 
         const favorites = user.favorites.map(favorite => { return favorite._id })
@@ -221,7 +222,7 @@ exports.getProfile = async (req, res, next) => {
             path: '/users/profile',
             userId: userId,
             user: user,
-            gradients: user.favorites, 
+            gradients: user.gradients, 
             favorites: favorites
         });
     }
@@ -282,14 +283,23 @@ exports.postUserEdit = async (req, res, next) => {
 
 
 exports.getPosts  = async(req, res, next) =>{
-    const user  = await User.findById(req.session.user._id).populate('gradients').exec()
+    const user  = await User.findById(req.session.user._id)
+    .populate('gradients')
+    .populate({
+        path: 'gradients',
+        populate: {
+            path: 'userId',
+            model: 'User'
+        }
+    })
+    .exec()
     const posts = user.gradients
     const favorites = user.favorites.map(favorite => { return favorite._id })
 
 
-    res.render('posts',{
+    res.render('profile',{
         pageTitle: 'posts',
-        path: '/users/posts',
+        path: '/users/profile/posts',
         gradients: posts,
         favorites: favorites,
         userId: user._id

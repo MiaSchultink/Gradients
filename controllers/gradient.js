@@ -22,7 +22,7 @@ exports.postGradientPage = async (req, res, next) => {
     if (title.length === 0) {
         title = "Gradient"
     }
-    const user = await User.findById(req.session.user._id)
+    const user = await User.findById(req.session.user._id).exec()
 
 
     const colors = [req.body.color1, req.body.color2];
@@ -107,11 +107,14 @@ exports.postToLibrary = async (req, res, next) => {
 };
 
 exports.getGradientLibrary = async (req, res, next) => {
-    const gradients = await Gradient.find({ library: true }).exec();
+    const gradients = await Gradient.find({ library: true }).populate('userId').exec();
     const user = await User.findById(req.session.user._id).exec();
 
     const type = gradients.type;
     const favorites = user.favorites;
+    console.log(gradients)
+
+
 
     res.render('library', {
         pageTitle: 'Gradient-library',
@@ -145,7 +148,7 @@ exports.getGradientView = async (req, res, next) => {
         library: gradient.library,
         type: gradient.type,
         favorites: favorites, 
-        creator: creator.name
+        creator: creator
     });
 };
 
@@ -173,11 +176,16 @@ exports.searchLibrary = async (req, res, next) => {
                     { library: true }
                 ]
             })
+            .populate('userId')
             .exec();
-
-
-
-
+ 
+            if(gradients.length==0){
+                res.render('no-results',{
+                    pageTitle: 'No results',
+                    path: 'gradient/search'
+                })
+            }
+        
         res.render('library', {
             gradients: gradients,
             path: '/gradient/search',
@@ -260,16 +268,25 @@ exports.addToFavorites = async (req, res, next) => {
 exports.getFavorites = async (req, res, next) => {
     const user = await User.findById(req.session.user._id)
         .populate('favorites')
+        .populate({
+            path: 'favorites',
+            populate: {
+                path: 'userId',
+                model: 'User'
+            }
+        })
         .exec();
+
+    
 
     const favorites = user.favorites.map(favorite => { return favorite._id })
 
-
-    res.render('favorites', {
+    res.render('profile', {
         pageTitle: 'favorites',
-        path: '/users/favorites',
+        path: '/users/profile/favorites',
         gradients: user.favorites,
         favorites: favorites,
+        userId: user.favorites.userId
     });
 }
 

@@ -12,7 +12,7 @@
         </div>
         <% } %>
       </div>
-      <div class="creator"><%=creator%></div>
+      <div class="creator"><%=creator.name%></div>
         <script>
           function favorite(){
         const heartIcon  = document.getElementById('heart')
@@ -34,6 +34,7 @@
                  <% } %> 
             </form>
 
+    <% if(creator._id.toString()==userId.toString()){%>
             <form class="form" action="/gradient/delete" method="post">
               <input type="hidden" name="userId" value='<%=userId%>'>
               <input type="hidden" name="gradientId" value='<%=gradientId%>'>
@@ -45,6 +46,8 @@
               <input type="hidden" name="tags" value='<%=tags%>'>
               <button class="btn" type="submit"><i class="fas fa-trash-alt delete icon big"></i></button>
             </form>
+
+            <% } %> 
 
             <% if(!library) { %>
               <form class="form" action="/gradient/library" method="post">

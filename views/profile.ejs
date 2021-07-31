@@ -11,16 +11,26 @@
 
           <div class="profile-flex">
             <div class="profile-block">
-              <h1>Your profile</h1>
+              <h1> <%=user.name%></h1>
               <input type="hidden" name="_csrf" value='<%=csrfToken%>'>
-              <div class="form-group">
-                <%=user.name%>
-              </div>
-              <div class="form-group">
-                <%=user.email%>
-              </div>
+            
+              <script>
+                function chanageNav(buttonId){
+                const button = document.getElementById(buttonId)
+                button.style.backgroundColor = "#4a018a";
+                }
+              </script>
+              <div class="profile-nav-container">
+                <button id="profile-a" class ="profile-a" onclick="changeNav('profile-a')">
+                <li class="profile-nav-item"><a  class = "<%= path === '/gradient/favorites' ? 'active' : ''%>"href="/gradient/favorites"><i class="fas fa-heart"></i> Favorites</a></li>
+                </button>
 
-              <h2>Favorites</h2>
+              <button id ="profile-a" class="profile-a" onclick="changeNav('profile-a')">
+                    <li class="profile-nav-item"><a class = "<%= path === '/users/posts/' ? 'active' : ''%>" href="/users/posts/<%=locals.user._id%>"><i class="fad fa-album-collection"></i>Posts</a></li>
+              </button>
+               
+                </div>
+              
               <div class="form-group">
                 <%- include('includes/library.ejs')%>
               </div>
