@@ -147,7 +147,7 @@ exports.getGradientView = async (req, res, next) => {
         gradientId: gradient._id,
         library: gradient.library,
         type: gradient.type,
-        favorites: favorites, 
+        favorites: favorites,
         creator: creator
     });
 };
@@ -178,23 +178,24 @@ exports.searchLibrary = async (req, res, next) => {
             })
             .populate('userId')
             .exec();
- 
-            if(gradients.length==0){
-                res.render('no-results',{
-                    pageTitle: 'No results',
-                    path: 'gradient/search'
-                })
-            }
-        
-        res.render('library', {
-            gradients: gradients,
-            path: '/gradient/search',
-            pageTitle: query,
-            count: gradients.length,
-            query: query,
-            favorites: favorites,
 
-        });
+        if (gradients.length == 0) {
+            res.render('no-results', {
+                pageTitle: 'No results',
+                path: 'gradient/search'
+            })
+        }
+        else {
+            res.render('library', {
+                gradients: gradients,
+                path: '/gradient/search',
+                pageTitle: query,
+                count: gradients.length,
+                query: query,
+                favorites: favorites,
+
+            });
+        }
     }
     catch (err) {
         console.log('library search err', err)
@@ -277,7 +278,7 @@ exports.getFavorites = async (req, res, next) => {
         })
         .exec();
 
-    
+
 
     const favorites = user.favorites.map(favorite => { return favorite._id })
 
