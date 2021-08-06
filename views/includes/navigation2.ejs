@@ -10,7 +10,8 @@
                     <li class="main-header__item"><a  class = "<%= path === '/gradient/create' ? 'active' : ''%>"href="/gradient/create"><i class="fad fa-pencil-paintbrush"></i> New</a></li>
                     <li class="main-header__item"><a  class = "<%= path === '/gradient/library' ? 'active' : ''%>"href="/gradient/library"><i class="fad fa-books"></i> Library</a></li>
                     <li class="main-header__item"><a class = "<%= path === '/users/profile' ? 'active' : ''%>" href="/users/profile/<%=locals.user._id%>"><i class="fad fa-user"></i> Profile</a></li>
-
+                    <li class="main-header__item"><a class = "<%= path === '/users/find' ? 'active' : ''%>" href="/users/find"><i class="fad fa-search"></i> Find people</a></li>
+                    
                  <% if (locals.isAdmin == true) { %>
                      <li class="main-header__item"><a  class = "<%= path === '/admin/users' ? 'active' : ''%>"href="/admin/users"><i class="fad fa-users"></i> Users</a></li>
                  <% } %>

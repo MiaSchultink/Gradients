@@ -222,7 +222,7 @@ exports.getProfile = async (req, res, next) => {
             path: '/users/profile',
             userId: userId,
             user: user,
-            gradients: user.gradients, 
+            gradients: user.gradients,
             favorites: favorites
         });
     }
@@ -282,30 +282,76 @@ exports.postUserEdit = async (req, res, next) => {
 }
 
 
-exports.getPosts  = async(req, res, next) =>{
-    const user  = await User.findById(req.session.user._id)
-    .populate('gradients')
-    .populate({
-        path: 'gradients',
-        populate: {
-            path: 'userId',
-            model: 'User'
-        }
-    })
-    .exec()
+exports.getPosts = async (req, res, next) => {
+    const user = await User.findById(req.session.user._id)
+        .populate('gradients')
+        .populate({
+            path: 'gradients',
+            populate: {
+                path: 'userId',
+                model: 'User'
+            }
+        })
+        .exec()
     const posts = user.gradients
     const favorites = user.favorites.map(favorite => { return favorite._id })
 
 
-    res.render('profile',{
+    res.render('profile', {
         pageTitle: 'posts',
         path: '/users/profile/posts',
         gradients: posts,
         favorites: favorites,
         userId: user._id
     })
-    
+
 }
+
+exports.getUsers = async (req, res, next) => {
+    const users = await User.find().exec();
+    res.render('users', {
+        path: 'users/find',
+        pageTitle: 'search for user',
+        users: users
+    })
+}
+
+exports.findUser = async (req, res, next) => {
+    try {
+        const query = req.body.query;
+        const users = await User.find(
+            {
+                $and: [
+                    { $text: { $search: query } }
+                ]
+            }
+        ).exec();
+
+        if (users.length == 0) {
+            res.render('no-results-user', {
+                pageTitle: 'No results',
+                path: '/users/find'
+            })
+        }
+        else {
+            res.render('users', {
+                path: '/users/find',
+                pageTitle: 'search for user',
+                users: users
+            })
+        }
+    }
+    catch (err) {
+        console.log('user search err', err)
+        res.render('error', {
+            pageTitle: 'Error',
+            path: '/error',
+            message: 'Search failed'
+        })
+    }
+
+}
+
 
 
 

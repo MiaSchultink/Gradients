@@ -1,0 +1,33 @@
+<%- include('includes/head.ejs')%>
+
+<body>
+
+  <div class="top">
+
+   <%- include('includes/user-search.ejs') %> 
+    <%- include('includes/logo.ejs')%>
+    <%- include('includes/navigation2.ejs')%>
+
+    <div class="main">
+      <h1>Find people</h1>
+      <div class="users-container">
+      <% for(let i=0 ;i<users.length; i++){%> 
+        <div class="user-info">
+            <div class=user-name>
+            <%= users[i].name %>
+        </div>
+        <button class="btn-text users">See profile</button>
+        <button class="btn-text users">Follow</button>
+        <button class="btn-text users">Unfollow</button>
+    </div>
+        <% } %> 
+
+   
+      </div>
+    </div>
+    
+  </div>
+
+</body>
+
+<%- include('includes/end.ejs')%>

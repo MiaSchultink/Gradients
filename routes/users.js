@@ -21,8 +21,11 @@ router.get('/profile/:userId',isAuth, userController.getProfile);
 router.get('/profile/edit/:userId',isAuth, userController.getUserEdit);
 router.post('/profile/edit', isAuth, userController.postUserEdit);
 
-router.get('/posts/:userId', isAuth, userController.getPosts)
+router.get('/posts/:userId', isAuth, userController.getPosts);
 
+router.get('/find', isAuth, userController.getUsers);
+
+router.post('/find', isAuth, userController.findUser);
 
 
 
