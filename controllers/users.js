@@ -6,6 +6,7 @@ const crypto = require('crypto')
 const bcrypt = require('bcryptjs');
 const sgMail = require('@sendgrid/mail');
 const { accessSync } = require('fs');
+const { use } = require('../routes/users');
 sgMail.setApiKey(process.env.API_KEY)
 
 exports.getLogIn = (req, res, next) => {
@@ -206,9 +207,10 @@ exports.postNewPassword = async (req, res, next) => {
 exports.getProfile = async (req, res, next) => {
     try {
         const userId = req.params.userId;
-        if (userId != req.session.user._id) {
-            throw new Error('Wrong profile')
-        }
+       
+        // if (userId != req.session.user._id) {
+        //     throw new Error('Wrong profile')
+        // }
         const user = await User.findById(userId)
             .populate('favorites')
             .populate('gradients')
@@ -223,7 +225,7 @@ exports.getProfile = async (req, res, next) => {
             userId: userId,
             user: user,
             gradients: user.gradients,
-            favorites: favorites
+            favorites: favorites,
         });
     }
     catch (err) {
@@ -235,6 +237,26 @@ exports.getProfile = async (req, res, next) => {
         })
     }
 };
+
+exports.getMyProfile = async(req, res, next) =>{
+    const user = await User.findById(req.session.user._id)
+    .populate('favorites')
+    .populate('gradients')
+    .exec();
+
+    const favorites = user.favorites.map(favorite => { return favorite._id })
+
+
+        res.render('myProfile', {
+            pageTitle: 'Your profile',
+            path: '/users/profile',
+            userId: user._id,
+            user: user,
+            gradients: user.gradients,
+            favorites: favorites
+        });
+
+}
 
 exports.getUserEdit = async (req, res, next) => {
     const user = await User.findById(req.session.user._id).exec()
@@ -283,7 +305,7 @@ exports.postUserEdit = async (req, res, next) => {
 
 
 exports.getPosts = async (req, res, next) => {
-    const user = await User.findById(req.session.user._id)
+    const user = await User.findById(req.params.userId)
         .populate('gradients')
         .populate({
             path: 'gradients',
@@ -302,22 +324,27 @@ exports.getPosts = async (req, res, next) => {
         path: '/users/profile/posts',
         gradients: posts,
         favorites: favorites,
-        userId: user._id
+        userId: user._id,
+        user:user
     })
 
 }
 
 exports.getUsers = async (req, res, next) => {
+    const user = await User.findById(req.session.user._id).exec();
     const users = await User.find().exec();
+
     res.render('users', {
         path: 'users/find',
         pageTitle: 'search for user',
-        users: users
+        users: users,
+        user: user
     })
 }
 
 exports.findUser = async (req, res, next) => {
     try {
+        const user = await User.findById(req.session.user._id).exec();
         const query = req.body.query;
         const users = await User.find(
             {
@@ -337,7 +364,8 @@ exports.findUser = async (req, res, next) => {
             res.render('users', {
                 path: '/users/find',
                 pageTitle: 'search for user',
-                users: users
+                users: users,
+                user: user
             })
         }
     }
@@ -351,6 +379,78 @@ exports.findUser = async (req, res, next) => {
     }
 
 }
+
+
+exports.follow = async (req, res, next) => {
+    try {
+
+        const follower = await User.findById(req.session.user._id).exec();
+        const followee = await User.findById(req.body.userId).exec();
+
+        follower.following.addToSet(followee._id);
+        await follower.save();
+
+        followee.followers.addToSet(follower._id);
+        await followee.save();
+
+        res.redirect('/users/find')
+    }
+    catch (err) {
+        console.log('follow err', err)
+        res.render('error', {
+            pageTitle: 'Error',
+            path: '/error',
+            message: 'Not followed'
+        })
+    }
+
+}
+
+exports.unfollow = async (req, res, next) =>{
+    try{
+        const follower = await User.findById(req.session.user._id).exec();
+        const followee = await User.findById(req.body.userId).exec();
+
+console.log(follower.following) 
+     
+        follower.following.pull(followee._id)
+        await follower.save();
+
+        console.log(follower.following)
+        followee.followers.pull(follower._id)
+        await followee.save();
+
+        res.redirect('/users/find')
+    }
+    catch (err) {
+        console.log('unfollow err', err)
+        res.render('error', {
+            pageTitle: 'Error',
+            path: '/error',
+            message: 'Unfollow unsucessful'
+        })
+    }
+}
+
+// exports.seeProfile = async (req, res, next) =>{
+
+//     const userId= req.body.userId;
+//     const user = await Use.finById(req.body.userId)
+//     .populate('gradients')
+//     .populate('favorites')
+//     .exec();
+
+//     const favorites = user.favorites.map(favorite => { return favorite._id })
+
+//     res.render('profile', {
+//         pageTitle: 'Your profile',
+//         path: '/users/profile',
+//         userId: userId,
+//         user: user,
+//         gradients: user.gradients,
+//         favorites: favorites
+//     });
+// }
 
 
 

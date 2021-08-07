@@ -339,12 +339,12 @@ ul{
     display: flex;
     justify-content: space-evenly;
 }
-.profile-nav-item a {
+/* .profile-nav-item a {
     text-decoration: none;
     color: white;
     font-size: 18px;
     
-}
+} */
 
 .profile-a{
     width: 100%;
@@ -354,6 +354,8 @@ ul{
     align-items: center;
     justify-content: center;
     margin: 10px;
+    color:white;
+    font-size: 18px;
     background-color:#853fe0;
     border:none;
 }
@@ -474,7 +476,7 @@ ul{
     width: auto;
     height: 50px;
     border-radius: 20px;
-    background-color: rgb(211, 211, 211);
+    background-color: #D1D1D1;
     padding: 10px;
     margin: 10px;
 }

@@ -16,10 +16,26 @@
             <div class=user-name>
             <%= users[i].name %>
         </div>
-        <button class="btn-text users">See profile</button>
+    
+        <button class="btn-text users" onclick="location.assign('/users/profile/<%=users[i]._id%>')">See profile</button>
+    
+       <% if(!user.following.includes(users[i]._id)){ %> 
+        <form name=follow action="/users/follow" method="post">
+            <input type ="hidden" name="userId" value='<%=users[i]._id%>'>
+            <input type ="hidden" name ="_csrf" value= '<%=csrfToken%>'>
         <button class="btn-text users">Follow</button>
+    </form>
+    
+    <% }else{%> 
+        <form action="/users/unfollow" name="unfollow" method="post">
+        <input type ="hidden" name="userId" value='<%=users[i]._id%>'>
+        <input type ="hidden" name ="_csrf" value= '<%=csrfToken%>'>
         <button class="btn-text users">Unfollow</button>
+        </form>
+       <% } %> 
+
     </div>
+
         <% } %> 
 
    

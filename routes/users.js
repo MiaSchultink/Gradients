@@ -18,6 +18,7 @@ router.get('/reset/:token', userController.getNewPassword);
 router.post('/new-password', userController.postNewPassword);
 
 router.get('/profile/:userId',isAuth, userController.getProfile);
+router.get('/myProfile/:userId', isAuth, userController.getMyProfile);
 router.get('/profile/edit/:userId',isAuth, userController.getUserEdit);
 router.post('/profile/edit', isAuth, userController.postUserEdit);
 
@@ -27,6 +28,10 @@ router.get('/find', isAuth, userController.getUsers);
 
 router.post('/find', isAuth, userController.findUser);
 
+router.post('/follow', isAuth, userController.follow);
+router.post('/unfollow', isAuth, userController.unfollow);
+
+// router.get('/profile:userId', isAuth, userController.seeProfile)
 
 
 module.exports = router;

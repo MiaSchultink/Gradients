@@ -1,0 +1,24 @@
+<%- include('includes/head.ejs')%>
+
+<body>
+
+  <div class="top">
+
+    <%- include('includes/search2.ejs')%>
+    <%- include('includes/logo.ejs')%>
+    <%- include('includes/navigation2.ejs')%>
+
+    <div class="main">
+        <div class="form-group">
+            <button class="link-btn">
+               <a class="link" href='/users/profile/edit/<%=user._id%>'>Edit profile</a>
+            </button>
+           </div>
+      <%- include('includes/profile.ejs') %> 
+    </div>
+    
+  </div>
+
+</body>
+
+<%- include('includes/end.ejs')%>

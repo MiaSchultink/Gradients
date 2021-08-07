@@ -240,7 +240,6 @@ exports.deleteGradient = async (req, res, next) => {
 
 
 exports.addToFavorites = async (req, res, next) => {
-    console.log('GradientId', req.body.gradientId)
     const gradient = await Gradient.findById(req.body.gradientId).exec();
 
     // const user = await User.findById(req.body.userId)
@@ -267,7 +266,7 @@ exports.addToFavorites = async (req, res, next) => {
 
 
 exports.getFavorites = async (req, res, next) => {
-    const user = await User.findById(req.session.user._id)
+    const user = await User.findById(req.params.userId)
         .populate('favorites')
         .populate({
             path: 'favorites',
@@ -287,7 +286,9 @@ exports.getFavorites = async (req, res, next) => {
         path: '/users/profile/favorites',
         gradients: user.favorites,
         favorites: favorites,
-        userId: user.favorites.userId
+        // userId: user.favorites.userId,
+        userId:user._id,
+        user:user
     });
 }
 

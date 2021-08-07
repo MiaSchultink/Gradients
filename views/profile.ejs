@@ -21,28 +21,15 @@
                 }
               </script>
               <div class="profile-nav-container">
-                <button id="profile-a" class ="profile-a" onclick="changeNav('profile-a')">
-                <li class="profile-nav-item"><a  class = "<%= path === '/gradient/favorites' ? 'active' : ''%>"href="/gradient/favorites"><i class="fas fa-heart"></i> Favorites</a></li>
-                </button>
-
-              <button id ="profile-a" class="profile-a" onclick="changeNav('profile-a')">
-                    <li class="profile-nav-item"><a class = "<%= path === '/users/posts/' ? 'active' : ''%>" href="/users/posts/<%=locals.user._id%>"><i class="fad fa-album-collection"></i>Posts</a></li>
-              </button>
+              
+              <button class="profile-a" onclick ="location.assign('/gradient/favorites/<%=user._id%>')">Favorites <i class="fas fa-heart"></i></button>
+              <button class="profile-a" onclick="location.assign('/users/posts/<%=user._id%>')">Posts <i class="fad fa-sticky-note"></i></button>
                
                 </div>
               
               <div class="form-group">
                 <%- include('includes/library.ejs')%>
               </div>
-
-              <% if (userId==user._id) { %>
-                <div class="form-group">
-               <button class="link-btn">
-                  <a class="link" href='/users/profile/edit/<%=user._id%>'>Edit profile</a>
-               </button>
-                <%}%>
-                </div>
-
 
             </div>
           </div>
