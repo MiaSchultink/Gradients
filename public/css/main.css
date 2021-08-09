@@ -248,13 +248,10 @@ input [type="search"]{
 input[type = "color"]{
     height: 30px;
     width: 50px;
-    border-radius: 10px;
+    border-radius: 20px;
     outline:none;
     outline-width: 0;
-    /* -webkit-appearance: none; */
-	border: none;
-    border-style: none;
-    /* box-sizing: border-box; */
+	border: 1px solid black;
 }
 input[type="color"]::-webkit-color-swatch-wrapper {
 	padding: 0;
@@ -263,6 +260,7 @@ input[type="color"]::-webkit-color-swatch {
 	border: none;
     border-radius: 15px;
 }
+
 
 select{
     height: 30px;

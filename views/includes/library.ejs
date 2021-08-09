@@ -4,24 +4,10 @@
     const canvas = document.getElementById(canvasId);
     const context = canvas.getContext("2d");
 
-    // function gradientDefaultSettings(gradient, context, colors) {
-    //   gradient.addColorStop(0, colors[0]);
-    //   gradient.addColorStop(1, colors[1]);
-    //   context.fillStyle = gradient;
-    //   context.fillRect(0, 0, 300, 300);
-    // }
-
     function gradientDefaultSettings(gradient, context, colors) {
 
       console.log('colors length', colors.length)
-      // let offsets =[]
-      // for(let y=0; y<colors.length; y++){
-      //  const offset = 1/colors.length;
-      //  offsets.push(offset)
-      // }
-      // offsets=offsets.reverse();
-      // console.log('offsets array' ,offsets)
-
+    
       gradient.addColorStop(0, colors[0]);
      for(let i=1; i<colors.length-1; i++){
        const color = colors[i];
@@ -35,8 +21,7 @@
     }
   
     let gradient;
-
-
+    
     switch (type) {
 
       case 'horizontal':

@@ -25,8 +25,15 @@ exports.postGradientPage = async (req, res, next) => {
     }
     const user = await User.findById(req.session.user._id).exec()
 
-
     const colors = [req.body.color1, req.body.color2, req.body.color3,req.body.color4, req.body.color5, req.body.color6];
+
+    for(let i=0; i< colors.length; i++){
+        console.log(colors[i])
+        if(colors[i]=="#fcfcfc"){
+            const index = colors.indexOf(colors[i])
+            colors.splice(index)
+        }
+    }
     const tagsArray = req.body.tags.split(' ');
     const userId = user._id
     const type = req.body.type;
