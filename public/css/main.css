@@ -226,7 +226,7 @@ input{
     height: 30px;
     width: 75vw;
     border-radius: 30px;
-    border: solid 2px black;
+    border: 1px solid black;
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
@@ -268,7 +268,7 @@ select{
     height: 30px;
     width: 75vw;
     border-radius: 30px;
-    border: solid 2px black;
+    border: solid 1px black;
 }
 
 /* gradient canvas */
@@ -476,7 +476,7 @@ ul{
     width: auto;
     height: 50px;
     border-radius: 20px;
-    background-color: #D1D1D1;
+    background-color: #E0E0E0;
     padding: 10px;
     margin: 10px;
 }

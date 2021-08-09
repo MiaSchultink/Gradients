@@ -1,62 +1,39 @@
 <script>
-  function makeGradient(colors, canvasId, type) {
-    colors = colors.split(',')
+  function makeGradient(color1, color2, canvasId, type) {
     const canvas = document.getElementById(canvasId);
+    console.log(canvas);
     const context = canvas.getContext("2d");
 
-    // function gradientDefaultSettings(gradient, context, colors) {
-    //   gradient.addColorStop(0, colors[0]);
-    //   gradient.addColorStop(1, colors[1]);
-    //   context.fillStyle = gradient;
-    //   context.fillRect(0, 0, 300, 300);
-    // }
-
-    function gradientDefaultSettings(gradient, context, colors) {
-
-      console.log('colors length', colors.length)
-      // let offsets =[]
-      // for(let y=0; y<colors.length; y++){
-      //  const offset = 1/colors.length;
-      //  offsets.push(offset)
-      // }
-      // offsets=offsets.reverse();
-      // console.log('offsets array' ,offsets)
-
-      gradient.addColorStop(0, colors[0]);
-     for(let i=1; i<colors.length-1; i++){
-       const color = colors[i];
-       const stopOffset = i/colors.length;
-       console.log('offset', stopOffset)
-       gradient.addColorStop(stopOffset, color);
-     }
-     gradient.addColorStop(1, colors[colors.length-1])
+    function gradientDefaultSettings(gradient, context, color1, color2) {
+      gradient.addColorStop(0, color1);
+      gradient.addColorStop(1, color2);
       context.fillStyle = gradient;
       context.fillRect(0, 0, 300, 300);
     }
-  
+    
     let gradient;
-
 
     switch (type) {
 
       case 'horizontal':
         gradient = context.createLinearGradient(0, 0, 300,0);
-        gradientDefaultSettings(gradient, context, colors)
+        gradientDefaultSettings(gradient, context, color1, color2)
         break;
+
 
         case 'vertical':
          gradient = context.createLinearGradient(0, 0, 0, 300);
-         gradientDefaultSettings(gradient, context, colors)
+         gradientDefaultSettings(gradient, context, color1, color2)
          break;
 
          case 'diagonal':
          gradient = context.createLinearGradient(0, 0, 300,300)
-         gradientDefaultSettings(gradient, context, colors)
+         gradientDefaultSettings(gradient, context, color1, color2)
          break;
 
          case 'radial':
          gradient = context.createRadialGradient(200, 200, 20, 200, 100, 200)
-         gradientDefaultSettings(gradient, context, colors)
+         gradientDefaultSettings(gradient, context, color1, color2)
          break;
 
     }
@@ -69,8 +46,7 @@
 
   <div class="small-container">
     <canvas id='<%=gradients[i]._id%>' class="small-canvas" height="300px" width="300px" onclick="location.assign('/gradient/view/<%=gradients[i]._id%>')"></canvas>
-    <script>makeGradient('<%=gradients[i].colors%>', '<%=gradients[i]._id%>','<%=gradients[i].type%>')
-    </script>
+    <script>makeGradient('<%=gradients[i].colors[0]%>', '<%=gradients[i].colors[1]%>', '<%=gradients[i]._id%>','<%=gradients[i].type%>')</script>
 
 
     <form class="like-form" action = "/gradient/library/favorites" method="post">

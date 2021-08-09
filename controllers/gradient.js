@@ -5,6 +5,7 @@ const User = require('../models/user')
 const puppeteer = require('puppeteer');
 const gradient = require('../models/gradient.js');
 const user = require('../models/user');
+const nearestColor = require('nearest-color');
 
 
 
@@ -25,7 +26,7 @@ exports.postGradientPage = async (req, res, next) => {
     const user = await User.findById(req.session.user._id).exec()
 
 
-    const colors = [req.body.color1, req.body.color2];
+    const colors = [req.body.color1, req.body.color2, req.body.color3,req.body.color4, req.body.color5, req.body.color6];
     const tagsArray = req.body.tags.split(' ');
     const userId = user._id
     const type = req.body.type;
@@ -52,15 +53,17 @@ exports.postGradientPage = async (req, res, next) => {
         green: '#00ff37',
         blue: '#00f',
         purple: '#b910e3',
-        pink: '#f564df'
+        pink: '#f564df',
+        black: '#000000',
+        white: '#ffffff'
     };
 
 
-    const nearestColor = require('nearest-color').from(primaryColors)
-    const color1 = nearestColor(gradient.colors[0])
-    const color2 = nearestColor(gradient.colors[1])
-
-    gradient.tags.push(color1.name, color2.name)
+    for(let i=0; i<gradient.colors.length; i++){
+        const nearestColor = require('nearest-color').from(primaryColors)
+        const color = nearestColor(gradient.colors[i])
+        gradient.tags.push(color.name)
+    }
 
     user.gradients.push(gradient)
 
@@ -71,10 +74,10 @@ exports.postGradientPage = async (req, res, next) => {
     await user.save();
 
 
-
     res.render('gradient-view', {
         pageTitle: 'Your gradients',
         path: '/gradient/create',
+        gradient: gradient,
         title: gradient.title,
         color1: req.body.color1,
         color2: req.body.color2,
@@ -112,7 +115,6 @@ exports.getGradientLibrary = async (req, res, next) => {
 
     const type = gradients.type;
     const favorites = user.favorites;
-    console.log(gradients)
 
 
 
@@ -139,6 +141,7 @@ exports.getGradientView = async (req, res, next) => {
     res.render('gradient-view', {
         pageTitle: gradient.title,
         path: '/gradient-view',
+        gradient: gradient,
         title: gradient.title,
         color1: gradient.colors[0],
         color2: gradient.colors[1],
