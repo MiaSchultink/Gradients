@@ -31,6 +31,8 @@ router.post('/find', isAuth, userController.findUser);
 router.post('/follow', isAuth, userController.follow);
 router.post('/unfollow', isAuth, userController.unfollow);
 
+router.get('/followers/:userId', isAuth, userController.getFollowers);
+
 // router.get('/profile:userId', isAuth, userController.seeProfile)
 
 

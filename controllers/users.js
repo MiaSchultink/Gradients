@@ -207,7 +207,7 @@ exports.postNewPassword = async (req, res, next) => {
 exports.getProfile = async (req, res, next) => {
     try {
         const userId = req.params.userId;
-       
+
         // if (userId != req.session.user._id) {
         //     throw new Error('Wrong profile')
         // }
@@ -238,23 +238,23 @@ exports.getProfile = async (req, res, next) => {
     }
 };
 
-exports.getMyProfile = async(req, res, next) =>{
+exports.getMyProfile = async (req, res, next) => {
     const user = await User.findById(req.session.user._id)
-    .populate('favorites')
-    .populate('gradients')
-    .exec();
+        .populate('favorites')
+        .populate('gradients')
+        .exec();
 
     const favorites = user.favorites.map(favorite => { return favorite._id })
 
 
-        res.render('myProfile', {
-            pageTitle: 'Your profile',
-            path: '/users/profile',
-            userId: user._id,
-            user: user,
-            gradients: user.gradients,
-            favorites: favorites
-        });
+    res.render('myProfile', {
+        pageTitle: 'Your profile',
+        path: '/users/profile',
+        userId: user._id,
+        user: user,
+        gradients: user.gradients,
+        favorites: favorites
+    });
 
 }
 
@@ -325,7 +325,7 @@ exports.getPosts = async (req, res, next) => {
         gradients: posts,
         favorites: favorites,
         userId: user._id,
-        user:user
+        user: user
     })
 
 }
@@ -335,8 +335,9 @@ exports.getUsers = async (req, res, next) => {
     const users = await User.find().exec();
 
     res.render('users', {
+        title: 'Find people',
         path: 'users/find',
-        pageTitle: 'search for user',
+        pageTitle: 'find people',
         users: users,
         user: user
     })
@@ -362,8 +363,9 @@ exports.findUser = async (req, res, next) => {
         }
         else {
             res.render('users', {
+                title: 'Find people',
                 path: '/users/find',
-                pageTitle: 'search for user',
+                pageTitle: 'Find people',
                 users: users,
                 user: user
             })
@@ -406,13 +408,13 @@ exports.follow = async (req, res, next) => {
 
 }
 
-exports.unfollow = async (req, res, next) =>{
-    try{
+exports.unfollow = async (req, res, next) => {
+    try {
         const follower = await User.findById(req.session.user._id).exec();
         const followee = await User.findById(req.body.userId).exec();
 
-console.log(follower.following) 
-     
+        console.log(follower.following)
+
         follower.following.pull(followee._id)
         await follower.save();
 
@@ -432,25 +434,29 @@ console.log(follower.following)
     }
 }
 
-// exports.seeProfile = async (req, res, next) =>{
+exports.getFollowers = async (req, res, next) => {
+    try {
+        const user = await User.findById(req.params.userId).exec();
+        const followers = user.followers;
 
-//     const userId= req.body.userId;
-//     const user = await Use.finById(req.body.userId)
-//     .populate('gradients')
-//     .populate('favorites')
-//     .exec();
-
-//     const favorites = user.favorites.map(favorite => { return favorite._id })
-
-//     res.render('profile', {
-//         pageTitle: 'Your profile',
-//         path: '/users/profile',
-//         userId: userId,
-//         user: user,
-//         gradients: user.gradients,
-//         favorites: favorites
-//     });
-// }
+        res.render('users', {
+            title: user.name, 
+            path:'/users/followers',
+            pageTitle: user.name,
+            users: followers,
+            user: user,
+            userId: user._id
+        })
+    }
+    catch (err) {
+        console.log('cannot find followers', err)
+        res.render('error', {
+            pageTitle: 'Error',
+            path: '/error',
+            message: 'Cannot find followers'
+        })
+    }
+}
 
 
 

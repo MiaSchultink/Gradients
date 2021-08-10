@@ -8,32 +8,8 @@
       <%- include('includes/logo.ejs')%>
         <%- include('includes/navigation2.ejs')%>
         <div class="main">
-
-          <div class="profile-flex">
-            <div class="profile-block">
-              <h1> <%=user.name%></h1>
-              <input type="hidden" name="_csrf" value='<%=csrfToken%>'>
-            
-              <script>
-                function chanageNav(buttonId){
-                const button = document.getElementById(buttonId)
-                button.style.backgroundColor = "#4a018a";
-                }
-              </script>
-              <div class="profile-nav-container">
-              
-              <button class="profile-a" onclick ="location.assign('/gradient/favorites/<%=user._id%>')">Favorites <i class="fas fa-heart"></i></button>
-              <button class="profile-a" onclick="location.assign('/users/posts/<%=user._id%>')">Posts <i class="fad fa-sticky-note"></i></button>
-               
-                </div>
-              
-              <div class="form-group">
-                <%- include('includes/library.ejs')%>
-              </div>
-
-            </div>
-          </div>
-
+          
+          <%-include('includes/profile.ejs')%>
 
     </div>
 
