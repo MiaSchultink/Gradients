@@ -14,7 +14,7 @@
       <% for(let i=0 ;i<users.length; i++){%> 
         <div class="user-info">
             <div class=user-name>
-            <%= users[i].name %>
+            <%=users[i].name%>
         </div>
     
         <button class="btn-text users" onclick="location.assign('/users/profile/<%=users[i]._id%>')">See profile</button>

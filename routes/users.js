@@ -32,8 +32,7 @@ router.post('/follow', isAuth, userController.follow);
 router.post('/unfollow', isAuth, userController.unfollow);
 
 router.get('/followers/:userId', isAuth, userController.getFollowers);
-
-// router.get('/profile:userId', isAuth, userController.seeProfile)
+router.get('/following/:userId', isAuth, userController.getFollowing);
 
 
 module.exports = router;

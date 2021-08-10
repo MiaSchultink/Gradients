@@ -21,7 +21,7 @@
     }
   
     let gradient;
-    
+
     switch (type) {
 
       case 'horizontal':
@@ -67,6 +67,7 @@
          <% } %> 
          <input type="hidden" name="_csrf" value='<%=csrfToken%>'>
          <input type="hidden" name="gradientId" value='<%=gradients[i]._id%>'>
+         
          <div><%=gradients[i].userId.name%></div>
         
         </form>

@@ -10,15 +10,25 @@ const nearestColor = require('nearest-color');
 
 
 exports.getGradientPage = (req, res, next) => {
+    try{
     res.render('create-form', {
         pageTitle: 'Gradient-creation',
         path: '/gradient/create'
     });
+}
+catch (err) {
+    console.log('create form', err)
+    res.render('error', {
+        pageTitle: 'Error',
+        path: '/error',
+        message: 'Could not get create page'
+    })
+}
 };
 
 exports.postGradientPage = async (req, res, next) => {
-    //post gradient creation page
-
+   
+try{
     let title = req.body.title;
     if (title.length === 0) {
         title = "Gradient"
@@ -28,7 +38,6 @@ exports.postGradientPage = async (req, res, next) => {
     const colors = [req.body.color1, req.body.color2, req.body.color3,req.body.color4, req.body.color5, req.body.color6];
 
     for(let i=0; i< colors.length; i++){
-        console.log(colors[i])
         if(colors[i]=="#fcfcfc"){
             const index = colors.indexOf(colors[i])
             colors.splice(index)
@@ -97,6 +106,15 @@ exports.postGradientPage = async (req, res, next) => {
         creator: userId
 
     });
+}
+catch (err) {
+    console.log('create gradient err', err)
+    res.render('error', {
+        pageTitle: 'Error',
+        path: '/error',
+        message: 'Unable to create gradient'
+    })
+}
 };
 
 exports.postToLibrary = async (req, res, next) => {
@@ -117,13 +135,19 @@ exports.postToLibrary = async (req, res, next) => {
 };
 
 exports.getGradientLibrary = async (req, res, next) => {
+    try{
     const gradients = await Gradient.find({ library: true }).populate('userId').exec();
-    const user = await User.findById(req.session.user._id).exec();
 
     const type = gradients.type;
-    const favorites = user.favorites;
 
-
+    let favorites;
+    if(!req.session.user){
+        favorites=[];
+    }
+    else{      
+    const user = await User.findById(req.session.user._id).exec();
+    favorites = user.favorites;
+    }
 
     res.render('library', {
         pageTitle: 'Gradient-library',
@@ -132,9 +156,19 @@ exports.getGradientLibrary = async (req, res, next) => {
         favorites: favorites,
         type: type,
     })
+}
+catch (err) {
+    console.log('library acces', err)
+    res.render('error', {
+        pageTitle: 'Error',
+        path: '/error',
+        message: 'Could not acces library'
+    })
+}
 };
 
 exports.getGradientView = async (req, res, next) => {
+    try{
     const user = await User.findById(req.session.user._id).exec()
     const gradientId = req.params.gradientId;
 
@@ -160,6 +194,15 @@ exports.getGradientView = async (req, res, next) => {
         favorites: favorites,
         creator: creator
     });
+    }
+    catch (err) {
+        console.log('get gradient view', err)
+        res.render('error', {
+            pageTitle: 'Error',
+            path: '/error',
+            message: 'Unable to acess gradient view'
+        })
+    }
 };
 
 
@@ -250,11 +293,8 @@ exports.deleteGradient = async (req, res, next) => {
 
 
 exports.addToFavorites = async (req, res, next) => {
+    try{
     const gradient = await Gradient.findById(req.body.gradientId).exec();
-
-    // const user = await User.findById(req.body.userId)
-    //     .populate('favorites')
-    //     .exec();
     const user = await User.findById(req.session.user._id).populate('favorites').exec()
 
     const favorites = user.favorites.map(favorite => { return favorite._id })
@@ -271,11 +311,20 @@ exports.addToFavorites = async (req, res, next) => {
     await user.save();
 
     res.status(200).redirect('/gradient/view/' + gradient._id)
-
+    }
+    catch (err) {
+        console.log('add to favorites', err)
+        res.render('error', {
+            pageTitle: 'Error',
+            path: '/error',
+            message: 'Not added to favorites'
+        })
+    }
 }
 
 
 exports.getFavorites = async (req, res, next) => {
+    try{
     const user = await User.findById(req.params.userId)
         .populate('favorites')
         .populate({
@@ -301,9 +350,19 @@ exports.getFavorites = async (req, res, next) => {
         user:user
     });
 }
+catch (err) {
+    console.log('get Favorites', err)
+    res.render('error', {
+        pageTitle: 'Error',
+        path: '/error',
+        message: 'Could not find favorites'
+    })
+}
+}
 
 
 exports.libraryFavorite = async (req, res, next) => {
+    try{
     const gradient = await Gradient.findById(req.body.gradientId).exec();
     const user = await User.findById(req.session.user._id)
         .populate('favorites')
@@ -323,10 +382,20 @@ exports.libraryFavorite = async (req, res, next) => {
     await user.save();
 
     res.redirect('/gradient/library')
+}
+catch (err) {
+    console.log('library favorite', err)
+    res.render('error', {
+        pageTitle: 'Error',
+        path: '/error',
+        message: 'Unable to add to favorites'
+    })
+}
 
 };
 
 exports.download = async (req, res, next) => {
+    try{
     const gradient = await Gradient.findById(req.body.gradientId).exec()
 
 
@@ -347,21 +416,28 @@ exports.download = async (req, res, next) => {
     const height = width * aspectRatio;
 
     const options = {
+        colors: gradient.colors, 
         color1: gradient.colors[0],
         color2: gradient.colors[1],
         type: gradient.type,
         width: width,
         height: height
     }
-    await page.evaluate(async options => {
 
-        function createGradient(gradient, context, color1, color2) {
-            gradient.addColorStop(0, options.color1);
-            gradient.addColorStop(1, options.color2);
+    await page.evaluate(async options => {
+        function createGradient(gradient, context, colors) {
+            console.log('colors[0]', colors[0])
+            gradient.addColorStop(0, colors[0]);
+            console.log(colors[0])
+            for(let i=1 ;i<colors.length-1; i++){
+                const offset = i/colors.length; 
+                gradient.addColorStop(offset, colors[i])
+            }
+            gradient.addColorStop(1, colors[colors.length-1]);
             context.fillStyle = gradient;
             context.fillRect(0, 0, 500, 500);
         }
-
+  
         const canvas = document.createElement('canvas')
         document.body.appendChild(canvas)
         document.body.style.margin = 0
@@ -380,22 +456,22 @@ exports.download = async (req, res, next) => {
         switch (options.type) {
             case 'horizontal':
                 gradient = context.createLinearGradient(0, 0, 500, 0);
-                createGradient(gradient, context, options.color1, options.color2)
+                createGradient(gradient, context, options.colors)
                 break;
 
             case 'vertical':
                 gradient = context.createLinearGradient(0, 0, 0, 500)
-                createGradient(gradient, context, options.color1, options.color2)
+                createGradient(gradient, context, options.colors)
                 break;
 
             case 'radial':
                 gradient = context.createRadialGradient(300, 300, 30, 300, 300, 300)
-                createGradient(gradient, context, options.color1, options.color2)
+                createGradient(gradient, context, options.colors)
                 break;
 
             case 'diagonal':
                 gradient = context.createLinearGradient(0, 0, 500, 500)
-                createGradient(gradient, context, options.color1, options.color2)
+                createGradient(gradient, context,options.colors)
                 break;
 
         }
@@ -415,7 +491,15 @@ exports.download = async (req, res, next) => {
     res.setHeader('Contenbt-Type', 'image/png')
     res.send(buffer)
 
-
+    }
+    catch (err) {
+        console.log('pupeteer err', err)
+        res.render('error', {
+            pageTitle: 'Error',
+            path: '/error',
+            message: 'Could not download gradient'
+        })
+    }
 }
 
 

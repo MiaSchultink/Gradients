@@ -436,14 +436,15 @@ exports.unfollow = async (req, res, next) => {
 
 exports.getFollowers = async (req, res, next) => {
     try {
-        const user = await User.findById(req.params.userId).exec();
-        const followers = user.followers;
+        const user = await User.findById(req.params.userId)
+        .populate('followers')
+        .exec();
 
         res.render('users', {
-            title: user.name, 
-            path:'/users/followers',
+            title: user.name,
+            path: '/users/followers',
             pageTitle: user.name,
-            users: followers,
+            users: user.followers,
             user: user,
             userId: user._id
         })
@@ -454,6 +455,32 @@ exports.getFollowers = async (req, res, next) => {
             pageTitle: 'Error',
             path: '/error',
             message: 'Cannot find followers'
+        })
+    }
+}
+
+exports.getFollowing = async (req, res, next) => {
+    try {
+        const user = await User.findById(req.params.userId)
+        .populate('following')
+        .exec()
+       
+
+        res.render('users', {
+            title: user.name,
+            path: '/users/followers',
+            pageTitle: user.name,
+            users: user.following,
+            user: user,
+            userId: user._id
+        })
+    }
+    catch (err) {
+        console.log('cannot find following', err)
+        res.render('error', {
+            pageTitle: 'Error',
+            path: '/error',
+            message: 'Cannot find following'
         })
     }
 }
