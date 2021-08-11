@@ -239,37 +239,58 @@ exports.getProfile = async (req, res, next) => {
 };
 
 exports.getMyProfile = async (req, res, next) => {
-    const user = await User.findById(req.session.user._id)
-        .populate('favorites')
-        .populate('gradients')
-        .exec();
+    try {
+        const user = await User.findById(req.session.user._id)
+            .populate('favorites')
+            .populate('gradients')
+            .exec();
 
-    const favorites = user.favorites.map(favorite => { return favorite._id })
+        const favorites = user.favorites.map(favorite => { return favorite._id })
 
 
-    res.render('myProfile', {
-        pageTitle: 'Your profile',
-        path: '/users/profile',
-        userId: user._id,
-        user: user,
-        gradients: user.gradients,
-        favorites: favorites
-    });
+        res.render('myProfile', {
+            pageTitle: 'Your profile',
+            path: '/users/profile',
+            userId: user._id,
+            user: user,
+            gradients: user.gradients,
+            favorites: favorites
+        });
+    }
+    catch (err) {
+        console.log('my profile', err)
+        res.render('error', {
+            pageTitle: 'Error',
+            path: '/error',
+            message: 'Cannot reach your profile'
+        })
 
+    }
 }
 
 exports.getUserEdit = async (req, res, next) => {
-    const user = await User.findById(req.session.user._id).exec()
-    const userId = req.params.userId;
-    if (userId != req.session.user._id) {
-        throw new Error('Wrong profile')
+    try {
+        const user = await User.findById(req.session.user._id).exec()
+        const userId = req.params.userId;
+        if (userId != req.session.user._id) {
+            throw new Error('Wrong profile')
+        }
+        res.render('edit-user', {
+            pageTitle: 'Edit User',
+            path: 'users/profile/edit',
+            userId: userId,
+            user: user
+        });
+
     }
-    res.render('edit-user', {
-        pageTitle: 'Edit User',
-        path: 'users/profile/edit',
-        userId: userId,
-        user: user
-    });
+    catch (err) {
+        console.log('edit user get', err)
+        res.render('error', {
+            pageTitle: 'Error',
+            path: '/error',
+            message: 'Cannot edit user'
+        })
+    }
 }
 
 exports.postUserEdit = async (req, res, next) => {
@@ -305,42 +326,63 @@ exports.postUserEdit = async (req, res, next) => {
 
 
 exports.getPosts = async (req, res, next) => {
-    const user = await User.findById(req.params.userId)
-        .populate('gradients')
-        .populate({
-            path: 'gradients',
-            populate: {
-                path: 'userId',
-                model: 'User'
-            }
+    try {
+        const user = await User.findById(req.params.userId)
+            .populate('gradients')
+            .populate({
+                path: 'gradients',
+                populate: {
+                    path: 'userId',
+                    model: 'User'
+                }
+            })
+            .exec()
+        const posts = user.gradients
+        const favorites = user.favorites.map(favorite => { return favorite._id })
+
+
+        res.render('profile', {
+            pageTitle: 'posts',
+            path: '/users/profile/posts',
+            gradients: posts,
+            favorites: favorites,
+            userId: user._id,
+            user: user
         })
-        .exec()
-    const posts = user.gradients
-    const favorites = user.favorites.map(favorite => { return favorite._id })
+    }
+    catch (err) {
+        console.log('get posts', err)
+        res.render('error', {
+            pageTitle: 'Error',
+            path: '/error',
+            message: 'Failed to show posts'
+        })
 
 
-    res.render('profile', {
-        pageTitle: 'posts',
-        path: '/users/profile/posts',
-        gradients: posts,
-        favorites: favorites,
-        userId: user._id,
-        user: user
-    })
-
+    }
 }
 
 exports.getUsers = async (req, res, next) => {
-    const user = await User.findById(req.session.user._id).exec();
-    const users = await User.find().exec();
+    try {
+        const user = await User.findById(req.session.user._id).exec();
+        const users = await User.find().exec();
 
-    res.render('users', {
-        title: 'Find people',
-        path: 'users/find',
-        pageTitle: 'find people',
-        users: users,
-        user: user
-    })
+        res.render('users', {
+            title: 'Find people',
+            path: 'users/find',
+            pageTitle: 'find people',
+            users: users,
+            user: user
+        })
+    }
+    catch (err) {
+        console.log('get users', err)
+        res.render('error', {
+            pageTitle: 'Error',
+            path: '/error',
+            message: 'Unable to get users'
+        })
+    }
 }
 
 exports.findUser = async (req, res, next) => {
@@ -437,8 +479,8 @@ exports.unfollow = async (req, res, next) => {
 exports.getFollowers = async (req, res, next) => {
     try {
         const user = await User.findById(req.params.userId)
-        .populate('followers')
-        .exec();
+            .populate('followers')
+            .exec();
 
         res.render('users', {
             title: user.name,
@@ -462,9 +504,9 @@ exports.getFollowers = async (req, res, next) => {
 exports.getFollowing = async (req, res, next) => {
     try {
         const user = await User.findById(req.params.userId)
-        .populate('following')
-        .exec()
-       
+            .populate('following')
+            .exec()
+
 
         res.render('users', {
             title: user.name,
@@ -484,8 +526,6 @@ exports.getFollowing = async (req, res, next) => {
         })
     }
 }
-
-
 
 
 

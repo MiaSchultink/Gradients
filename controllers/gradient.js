@@ -3,8 +3,6 @@
 const Gradient = require('../models/gradient.js')
 const User = require('../models/user')
 const puppeteer = require('puppeteer');
-const gradient = require('../models/gradient.js');
-const user = require('../models/user');
 const nearestColor = require('nearest-color');
 
 
