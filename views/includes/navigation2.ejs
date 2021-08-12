@@ -5,54 +5,16 @@
     <div class="mobile-bar">
         <script>
             function dropdown(){
+            const container = document.getElementById('content-container')
             const content = document.getElementById('menu-content')
-            if(content.style.display=="none"){
-            content.style.display="block"
+           container.style.display="block"
+           content.style.display="block"
+          
             }
-            if(content.style.display=="block"){
-                content.style.display="none"
-            }
-            
-            
-            }
-
-
-
-
-
-    document.getElementById('menu-content').onclick = showDropDown;
-
-function showDropDown(e){
-     document.getElementById('dropdown-btn').onclick = function(){};
-     if(e.stopPropagation)
-         e.stopPropagation();   // W3C model
-     else
-         e.cancelBubble = true; // IE model
-
-     document.getElementById("menu-content").style.display = "block";
-     document.onclick = function(e){
-         var ele = document.elementFromPoint(e.clientX, e.clientY);
-         if(ele == document.getElementById("dropdown-btn")){
-             hideDropDown();
-             return;
-         }
-         do{
-             if(ele == document.getElementById("menu-content"))
-                 return;
-         }while(ele = ele.parentNode);
-         hideDropDown();
-     };
-}
-
-function hideDropDown(){
-    document.onclick = function(){};
-    document.getElementById("menu-content").style.display = "none";
-    document.getElementById('dropdown-btn').onclick = showDropDown;
-}
-            
+    
         </script>
-<button class="dropdown-btn" onclick="showDropDown"><i class="fad fa-bars"></i></button>
-
+<button class="dropdown-btn" onclick="dropdown()"><i class="fad fa-bars"></i></button>
+<div class="content-container" id ="content-container">
 <div  id="menu-content" class="menu-content">
     <% if (locals.isLoggedIn == true) { %>
         <li class="main-header__item"><a  class = "<%= path === '/gradient/create' ? 'active' : ''%>"href="/gradient/create"><i class="fad fa-pencil-paintbrush"></i> New</a></li>
@@ -75,6 +37,7 @@ function hideDropDown(){
         <li class="main-header__item"><a class = "<%= path === '/users/sign-up' ? 'active' : ''%>" href="/users/sign-up"><i class="fad fa-user-plus"></i> Sign-up</a></li>
         <% } %> 
 
+</div>
 </div>
 
 </div>

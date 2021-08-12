@@ -533,6 +533,21 @@ ul{
     cursor: pointer;
 }
 
+.pagination a{
+    border: 1px solid #853fe0;
+    height: 40px;
+    width: 40px;
+    padding: 10px;
+    color:#853fe0;
+    text-decoration: none;
+    border-radius: 9px;
+}
+.pagination a:hover, 
+.pagination a.active{
+    color: white;
+    background-color: #853fe0;
+}
+
 
 @media screen and (max-width: 480px){
     .top{
@@ -557,8 +572,13 @@ ul{
     .big-nav{
         display: none;
     }
+    .content-container{
+        display: none;
+    }
+    
     .menu-content{
         display: none;
     }
+
     
 }
