@@ -18,16 +18,6 @@ body {
                         "nav main"; 
 }
 
-@media screen and (max-width: 480px){
-    .top{
-        width: 100%;
-        display: grid;
-        grid-template-columns: 200px 1fr;
-        grid-template-rows: auto 1fr;
-        grid-template-areas: "logo nav" 
-                              "search main"
-    }
-}
 .right-body{
     display: block;
 }
@@ -54,27 +44,64 @@ max-width: 75vw;
 }
 
 .search-input {
-    height: 100%;
+    height: 50px;
     padding: 10px;
+}
+
+.search-btn{
+    background-color: #853fe0;
+    font-size: 25px;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    color: white;
+    border-radius: 25px;
+}
+.search-btn:hover{
+    border: 2px solid #853fe0;
+    background-color: transparent;
+    color: #853fe0;
 }
 
 .search-form {
     display: grid;
-    grid-template-columns: 1fr 100px;
+    grid-template-columns: 1fr 50px;
     gap: 10px;
 }
-
 
 
 .mian-header{
     height: 100vh;
     width: 200px;
     background-color: #853fe0;
+    display: inherit;
 }
 
 .nav-bar-container{
  grid-area: nav; 
  background-color: #853fe0;
+}
+.mobile-bar{
+    display: block;
+    display: inherit;
+}
+.dropdown-btn{
+    height: 50px;
+    width: 50px;
+    outline: none;
+    border-style: none;
+    border-radius: 25px;
+    background-color: #853fe0;
+    color: white;
+    font-size: 25px;
+}
+.mobile-nav{
+    display: none;
+}
+.big-nav{
+    grid-area: nav;
+    display: block;
 }
 
 .main-header__nav{
@@ -223,7 +250,7 @@ input,label{
     display: block;
 }
 input{
-    height: 30px;
+    height: 40px;
     width: 75vw;
     border-radius: 30px;
     border: 1px solid black;
@@ -244,15 +271,20 @@ input [type="search"]{
     justify-content: center;
     box-sizing: border-box;
     display: inline-block;
+    padding: 5px;
 }
 input[type = "color"]{
-    height: 30px;
+    height: 50px;
     width: 50px;
-    border-radius: 20px;
+    border-radius: 25px;
     outline:none;
     outline-width: 0;
 	border: 1px solid black;
 }
+.form-input-color{
+    border-radius: 25px;
+}
+
 input[type="color"]::-webkit-color-swatch-wrapper {
 	padding: 0;
 }
@@ -263,10 +295,11 @@ input[type="color"]::-webkit-color-swatch {
 
 
 select{
-    height: 30px;
+    height: 40px;
     width: 75vw;
     border-radius: 30px;
     border: solid 1px black;
+    padding: 5px;
 }
 
 /* gradient canvas */
@@ -501,4 +534,31 @@ ul{
 }
 
 
+@media screen and (max-width: 480px){
+    .top{
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+        grid-template-areas: "logo"
+                              "nav"
+                              "search" 
+                              "main"
+    }
+}
 
+@media screen and (max-width: 480px){
+    .mobile-nav{
+        grid-area: nav;
+        background-color: #853fe0;
+        color: white;
+        display: block;
+    }
+    .big-nav{
+        display: none;
+    }
+    .menu-content{
+        display: none;
+    }
+    
+}
