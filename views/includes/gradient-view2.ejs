@@ -4,21 +4,21 @@
     <!-- <div class="info-subcontainer"> -->
       <div class="info-text">
       <h1>
-        <%=gradient.title%>
+        <%=title%>
       </h1>
       <div class="tags-container">
-      <%for(let i=0; i<gradient.tags.length; i++ ){%>
-        <div class="tag">#<%=gradient.tags[i]%>
+      <%for(let i=0; i<tags.length; i++ ){%>
+        <div class="tag">#<%=tags[i]%>
         </div>
         <% } %>
       </div>
-      <div class="creator"><%=gradient.userId.name%></div>
-        <!-- <script>
+      <div class="creator"><%=creator.name%></div>
+        <script>
           function favorite(){
         const heartIcon  = document.getElementById('heart')
         heartIcon.className = 'fas fa-heart'
           }
-      </script> -->
+      </script>
 </div>
 
           <div class="btns-container">
@@ -34,11 +34,16 @@
                  <% } %> 
             </form>
 
-    <% if(gradient.userId._id.toString()==userId.toString()){%>
+    <% if(creator._id.toString()==userId.toString()){%>
             <form class="form" action="/gradient/delete" method="post">
               <input type="hidden" name="userId" value='<%=userId%>'>
               <input type="hidden" name="gradientId" value='<%=gradientId%>'>
               <input type="hidden" name="_csrf" value='<%=csrfToken%>'>
+              <input type="hidden" name="type" value='<%=type%>'>
+              <input type="hidden" name="title" value='<%=title%>'>
+              <input type="hidden" name="color1" value='<%=color1%>'>
+              <input type="hidden" name="color2" value='<%=color2%>'>
+              <input type="hidden" name="tags" value='<%=tags%>'>
               <button class="btn" type="submit"><i class="fas fa-trash-alt delete icon big"></i></button>
             </form>
 
@@ -48,6 +53,11 @@
 
             <% if(!library) { %>
               <form class="form" action="/gradient/library" method="post">
+                <input type="hidden" name="title" value='<%=title%>'>
+                <input type="hidden" name="color1" value='<%=color1%>'>
+                <input type="hidden" name="color2" value='<%=color2%>'>
+                <input type="hidden" name="type" value='<%=type%>'>
+                <input type="hidden" name="tags" value='<%=tags%>'>
                 <input type="hidden" name="_csrf" value='<%=csrfToken%>'>
                 <input type="hidden" name="gradientId" value='<%=gradientId%>'>
                 <button class="btn-text" type="submit">Publish to library</button>
@@ -118,7 +128,7 @@
   }
 
   let gradient;
-  switch ('<%=gradient.type%>') {
+  switch ('<%=type%>') {
     case 'horizontal':
       gradient = context.createLinearGradient(0, 0, 500, 0);
       createGradient(gradient, context, '<%=gradient.colors%>')

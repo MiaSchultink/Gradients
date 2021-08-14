@@ -1,21 +1,18 @@
 <%- include('includes/head.ejs')%>
 
-    <body>
+<body>
+
+  <div class="top">
+
+    <%- include('includes/search2.ejs')%>
+    <%- include('includes/logo.ejs')%>
+    <%- include('includes/navigation2.ejs')%>
+
+    <div class="main">
 
 
-            <div class="top">
-          
-              <%- include('includes/search2.ejs')%>
-              <%- include('includes/logo.ejs')%>
-              <%- include('includes/navigation2.ejs')%>
+      <form action = "/gradient/edit" method ="post">
 
-           <div class="main">
-
-            
-        <div class="form-container">
-        <div class="form-subcontainer">
-            <h1>Create your gradient...</h1>
-            <form class="form" action="/gradient/view" method="post">
                 <div class="form-group">
                     <label for="title"> Gradient name</label>
                     <input id="title" class="form-input-text" type="text" name="title" 
@@ -50,18 +47,14 @@
 
 
                 <div class = "form-group">
-                <button class="btn-text" type="submit">Create Gradient</button>
-            </div>
-            <input type ="hidden" name ="_csrf" value= '<%=csrfToken%>'>
-            </form>
-        </div>
-        </div>
-        
-
+                    <button class="btn-text" type="submit">Save changes</button>
+                </div>
+                <input type="hidden" name="gradientId" value='<%=gradientId%>'>
+                <input type ="hidden" name ="_csrf" value= '<%=csrfToken%>'>
     </div>
     
-</div>
+  </div>
 
 </body>
 
-            <%- include('includes/end.ejs')%>
+<%- include('includes/end.ejs')%>

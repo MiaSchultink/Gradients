@@ -5,8 +5,8 @@ const Gradient = require('../models/gradient')
 const crypto = require('crypto')
 const bcrypt = require('bcryptjs');
 const sgMail = require('@sendgrid/mail');
-const { accessSync } = require('fs');
-const { use } = require('../routes/users');
+const ITEMS_PER_PAGE = 6;
+
 sgMail.setApiKey(process.env.API_KEY)
 
 exports.getLogIn = (req, res, next) => {
@@ -17,34 +17,62 @@ exports.getLogIn = (req, res, next) => {
     });
 }
 
-exports.postLogin = (req, res, next) => {
+exports.postLogin = async (req, res, next) => {
+    try{
     const email = req.body.email;
     const password = req.body.password;
-    User.findOne({ email: email })
-        .then(user => {
-            if (!user) {
-                return res.redirect('/users/login');
-            }
-            bcrypt
-                .compare(password, user.password)
-                .then(doMatch => {
-                    if (doMatch) {
-                        req.session.isLoggedIn = true;
-                        req.session.user = user;
-                        req.session.isAdmin = (user.role == 'admin');
-                        return req.session.save(err => {
-                            console.log(err);
-                            res.redirect('/');
-                        });
-                    }
-                    res.redirect('/users/login');
-                })
-                .catch(err => {
-                    console.log(err);
-                    res.redirect('/users/login');
-                });
+    const user = await User.findOne({email: email}).exec()
+    
+    if(!user){
+        res.redirect('/users/login')
+    }
+    const passwordMatch = await bcrypt.compare(password, user.password)
+    if(passwordMatch){
+        req.session.isLoggedIn = true;
+        req.session.user = user;
+        req.session.isAdmin = (user.role == 'admin');
+        await req.session.save()
+        res.redirect('/gradient/library')
+    }
+    else{
+        res.redirect('/users/login')
+    }
+
+    }
+    catch (err) {
+        console.log(err)
+        res.render('error', {
+            pageTitle: 'Error',
+            path: '/error',
+            message: 'Login Failed'
         })
-        .catch(err => console.log(err));
+    }
+
+    // User.findOne({ email: email })
+    //     .then(user => {
+    //         if (!user) {
+    //             return res.redirect('/users/login');
+    //         }
+    //         bcrypt
+    //             .compare(password, user.password)
+    //             .then(doMatch => {
+    //                 if (doMatch) {
+    //                     req.session.isLoggedIn = true;
+    //                     req.session.user = user;
+    //                     req.session.isAdmin = (user.role == 'admin');
+    //                     return req.session.save(err => {
+    //                         console.log(err);
+    //                         res.redirect('/');
+    //                     });
+    //                 }
+    //                 res.redirect('/users/login');
+    //             })
+    //             .catch(err => {
+    //                 console.log(err);
+    //                 res.redirect('/users/login');
+    //             });
+    //     })
+    //     .catch(err => console.log(err));
 };
 
 exports.postLogout = (req, res, next) => {
@@ -63,39 +91,76 @@ exports.getSignUp = (req, res, next) => {
 };
 
 exports.postSignUp = async (req, res, next) => {
+    try{
     const name = req.body.name;
     const email = req.body.email;
     const password = req.body.password;
     const confirmPassword = req.body.confirmPassword;
+    console.log('beginning')
 
-    User.findOne({ email: email }).then(userDoc => {
-        if (userDoc) {
-            return res.redirect('/users/sign-up')
-        }
-        return bcrypt.hash(password, 12)
-            .then(hashedPassword => {
-                const user = new User({
-                    name: name,
-                    email: email,
-                    password: hashedPassword,
-                    gradients: []
-                });
-                return user.save()
-            })
-            .then(result => {
-                const message = {
-                    to: email,
-                    from: 'contact@miaschultink.com',
-                    subject: 'Sign-up Suceeded!',
-                    html: '<h1>You sucessfully signed up!</h1>'
-                }
-                sgMail.send(message)
-                res.redirect('/users/login')
-            });
+    const tempUser = await User.findOne({email:email}).exec();
+    if(tempUser){
+        throw new Error('Sign-up failed')
+    }
+    const hashedPassword = await bcrypt.hash(password, 12)
+    console.log("hello")
+    const user = new User({
+        name: name,
+        email: email,
+        password: hashedPassword,
+        gradients: []
+    });
+    console.log('made user')
+    await user.save();
+    console.log('saved user')
+
+    const message = {
+        to: email,
+        from: 'contact@miaschultink.com',
+        subject: 'Sign-up Suceeded!',
+        html: '<h1>You sucessfully signed up!</h1>'
+    }
+    sgMail.send(message)
+    res.redirect('/users/login')
+}
+
+catch (err) {
+    console.log(err)
+    res.render('error', {
+        pageTitle: 'Error',
+        path: '/error',
+        message: 'Sign-up failed'
     })
-        .catch(err => {
-            console.log(err)
-        })
+}
+
+    // User.findOne({ email: email }).then(userDoc => {
+    //     if (userDoc) {
+    //         return res.redirect('/users/sign-up')
+    //     }
+    //     return bcrypt.hash(password, 12)
+    //         .then(hashedPassword => {
+    //             const user = new User({
+    //                 name: name,
+    //                 email: email,
+    //                 password: hashedPassword,
+    //                 gradients: []
+    //             });
+    //             return user.save()
+    //         })
+    //         .then(result => {
+    //             const message = {
+    //                 to: email,
+    //                 from: 'contact@miaschultink.com',
+    //                 subject: 'Sign-up Suceeded!',
+    //                 html: '<h1>You sucessfully signed up!</h1>'
+    //             }
+    //             sgMail.send(message)
+    //             res.redirect('/users/login')
+    //         });
+    // })
+    //     .catch(err => {
+    //         console.log(err)
+    //     })
 
 };
 
@@ -206,16 +271,19 @@ exports.postNewPassword = async (req, res, next) => {
 
 exports.getProfile = async (req, res, next) => {
     try {
+        const page = +req.query||1;
+
         const userId = req.params.userId;
 
-        // if (userId != req.session.user._id) {
-        //     throw new Error('Wrong profile')
-        // }
         const user = await User.findById(userId)
             .populate('favorites')
             .populate('gradients')
             .exec();
 
+
+            const posts = await Gradient.find({userId:req.params.userId}).skip((page-1)*ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE).exec();
+            const totalPosts  = await Gradient.find({userId:req.params.userId}).countDocuments().exec();
+            const urlBit = '/users/posts/' + user._id;
         const favorites = user.favorites.map(favorite => { return favorite._id })
 
 
@@ -224,8 +292,16 @@ exports.getProfile = async (req, res, next) => {
             path: '/users/profile',
             userId: userId,
             user: user,
-            gradients: user.gradients,
+            gradients: posts,
             favorites: favorites,
+            currentPage: page, 
+            hasNextPage: ITEMS_PER_PAGE*page<totalPosts,
+            hasPreviousPage: page>1,
+            nextPage: page+1,
+            prevPage: page -1,
+            lastPage: Math.ceil(totalPosts/ ITEMS_PER_PAGE),
+            urlBit: urlBit
+
         });
     }
     catch (err) {
@@ -240,10 +316,16 @@ exports.getProfile = async (req, res, next) => {
 
 exports.getMyProfile = async (req, res, next) => {
     try {
+        const page =  req.query.page||1;
+        
         const user = await User.findById(req.session.user._id)
             .populate('favorites')
             .populate('gradients')
             .exec();
+    
+        const urlBit = '/users/myProfile/'+user._id;
+        const posts = await Gradient.find({userId:req.session.user._id}).skip((page-1)*ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE).exec();
+        const totalPosts  = await Gradient.find({userId:req.session.user._id}).countDocuments().exec();
 
         const favorites = user.favorites.map(favorite => { return favorite._id })
 
@@ -253,8 +335,15 @@ exports.getMyProfile = async (req, res, next) => {
             path: '/users/profile',
             userId: user._id,
             user: user,
-            gradients: user.gradients,
-            favorites: favorites
+            gradients: posts,
+            favorites: favorites,
+            currentPage: page,
+            hasNextPage: ITEMS_PER_PAGE * page < totalPosts,
+            hasPreviousPage: page > 1,
+            nextPage: page + 1,
+            prevPage: page - 1,
+            lastPage: Math.ceil(totalPosts / ITEMS_PER_PAGE),
+            urlBit: urlBit
         });
     }
     catch (err) {
@@ -327,6 +416,8 @@ exports.postUserEdit = async (req, res, next) => {
 
 exports.getPosts = async (req, res, next) => {
     try {
+     const page = +req.query.page||1;
+
         const user = await User.findById(req.params.userId)
             .populate('gradients')
             .populate({
@@ -337,7 +428,12 @@ exports.getPosts = async (req, res, next) => {
                 }
             })
             .exec()
-        const posts = user.gradients
+
+        const posts = await Gradient.find({userId:req.params.userId}).skip((page-1)*ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE).exec();
+        const totalPosts  = await Gradient.find({userId:req.params.userId}).countDocuments().exec();
+        const urlBit = '/users/posts/' + user._id;
+
+
         const favorites = user.favorites.map(favorite => { return favorite._id })
 
 
@@ -347,7 +443,14 @@ exports.getPosts = async (req, res, next) => {
             gradients: posts,
             favorites: favorites,
             userId: user._id,
-            user: user
+            user: user,
+            currentPage: page, 
+            hasNextPage: ITEMS_PER_PAGE*page<totalPosts,
+            hasPreviousPage: page>1,
+            nextPage: page+1,
+            prevPage: page -1,
+            lastPage: Math.ceil(totalPosts/ ITEMS_PER_PAGE),
+            urlBit: urlBit
         })
     }
     catch (err) {

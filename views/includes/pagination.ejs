@@ -1,0 +1,17 @@
+<section class="pagination">
+    <% if(currentPage!=1&& prevPage!=1){%>
+    <a href="<%=urlBit%>/?page=1">1</a>
+    <% } %> 
+
+    <% if(hasPreviousPage){%>
+      <a href="<%=urlBit%>/?page=<%=prevPage%>"><%=prevPage%></a>
+      <% } %> 
+
+    <a href="<%=urlBit%>/?page=<%=currentPage%>" class="active"><%=currentPage%></a>
+    <% if(hasNextPage){%>
+    <a href="<%=urlBit%>/?page=<%=nextPage%>"><%=nextPage%></a>
+    <% } %> 
+    <% if(lastPage!=currentPage&&nextPage!=lastPage){%>
+      <a href="<%=urlBit%>/?page=<%=lastPage%>"><%=lastPage%></a>
+      <% } %> 
+  </section>

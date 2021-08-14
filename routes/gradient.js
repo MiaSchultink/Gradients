@@ -22,6 +22,9 @@ router.post('/delete', isAuth, gradientController.deleteGradient)
 
 router.post('/download', isAuth, gradientController.download);
 
+router.get('/edit/:gradientId', isAuth, gradientController.getEditGraidnet);
+router.post('/edit', isAuth, gradientController.postEditGradients);
+
 
 
 
