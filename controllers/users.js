@@ -467,6 +467,8 @@ exports.getPosts = async (req, res, next) => {
 
 exports.getUsers = async (req, res, next) => {
     try {
+        const page = + req.query.page||1
+        const urlBit = '/users/find'
         const user = await User.findById(req.session.user._id).exec();
         const users = await User.find().exec();
 
@@ -475,7 +477,14 @@ exports.getUsers = async (req, res, next) => {
             path: 'users/find',
             pageTitle: 'find people',
             users: users,
-            user: user
+            user: user,
+            currentPage: page,
+            hasNextPage: ITEMS_PER_PAGE * page < users,
+            hasPreviousPage: page > 1,
+            nextPage: page + 1,
+            prevPage: page - 1,
+            lastPage: Math.ceil(users.length / ITEMS_PER_PAGE),
+            urlBit: urlBit
         })
     }
     catch (err) {

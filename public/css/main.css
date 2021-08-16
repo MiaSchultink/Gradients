@@ -361,6 +361,8 @@ select{
     height: 100%;
 }
 .profile-block{
+  width: 100%;
+  height: 100%;
  display:block;
 
 }
@@ -375,6 +377,7 @@ ul{
 .profile-nav-container{
     display: flex;
     justify-content: space-evenly;
+    width: 100%;
 }
 /* .profile-nav-item a {
     text-decoration: none;
@@ -589,4 +592,12 @@ ul{
     }
 
     
+}
+
+.pagination-container{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
 }

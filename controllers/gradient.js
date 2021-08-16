@@ -8,7 +8,7 @@ const { getUser } = require('./admin.js');
 
 const ITEMS_PER_PAGE = 6;
 
-async function updateGradient (gradient, req, user) {
+async function updateGradient(gradient, req, user) {
     let title = req.body.title;
     if (title.length === 0) {
         title = "Gradient"
@@ -30,36 +30,36 @@ async function updateGradient (gradient, req, user) {
     const aspectRatio = req.body.aspectRatio;
     const height = width * aspectRatio;
 
-    gradient.title=title
+    gradient.title = title
     gradient.tags = tagsArray
     gradient.colors = colors
     gradient.userId = creator
-    gradient.type= type
+    gradient.type = type
 
     const primaryColors = {
-            red: '#f00',
-            orange: '#f58c02',
-            yellow: '#ff0',
-            green: '#00ff37',
-            blue: '#00f',
-            purple: '#b910e3',
-            pink: '#f564df',
-            black: '#000000',
-            white: '#ffffff'
-        };
+        red: '#f00',
+        orange: '#f58c02',
+        yellow: '#ff0',
+        green: '#00ff37',
+        blue: '#00f',
+        purple: '#b910e3',
+        pink: '#f564df',
+        black: '#000000',
+        white: '#ffffff'
+    };
 
 
-        for (let i = 0; i < gradient.colors.length; i++) {
-            const nearestColor = require('nearest-color').from(primaryColors)
-            const color = nearestColor(gradient.colors[i])
-            gradient.tags.push(color.name)
-        }
+    for (let i = 0; i < gradient.colors.length; i++) {
+        const nearestColor = require('nearest-color').from(primaryColors)
+        const color = nearestColor(gradient.colors[i])
+        gradient.tags.push(color.name)
+    }
 
-        user.gradients.push(gradient)
+    user.gradients.push(gradient)
 
 
-        await gradient.save();
-        await user.save();
+    await gradient.save();
+    await user.save();
 
     return gradient
 }
@@ -82,34 +82,34 @@ exports.getGradientPage = (req, res, next) => {
 };
 
 
-exports.postGradientPage = async(req, res, next) =>{
-    try{
-    const user  = await User.findById(req.session.user._id).exec()
-    let gradient= new Gradient();
-    gradient = await updateGradient(gradient, req, user)
-    console.log(gradient.userId)
+exports.postGradientPage = async (req, res, next) => {
+    try {
+        const user = await User.findById(req.session.user._id).exec()
+        let gradient = new Gradient();
+        gradient = await updateGradient(gradient, req, user)
+        console.log(gradient.userId)
 
-    const favorites = user.favorites.map(favorite => { return favorite._id }) 
-    
-    res.render('gradient-view', {
-        pageTitle: gradient.title,
-        path: '/gradient/create',
-        gradient: gradient,
-        gradientId: gradient._id,
-        userId: req.session.user._id,
-        library: gradient.library,
-        favorites: favorites
+        const favorites = user.favorites.map(favorite => { return favorite._id })
 
-    });
-}
-catch (err) {
-    console.log('create gradient err', err)
-    res.render('error', {
-        pageTitle: 'Error',
-        path: '/error',
-        message: 'Unable to create gradient'
-    })
-}
+        res.render('gradient-view', {
+            pageTitle: gradient.title,
+            path: '/gradient/create',
+            gradient: gradient,
+            gradientId: gradient._id,
+            userId: req.session.user._id,
+            library: gradient.library,
+            favorites: favorites
+
+        });
+    }
+    catch (err) {
+        console.log('create gradient err', err)
+        res.render('error', {
+            pageTitle: 'Error',
+            path: '/error',
+            message: 'Unable to create gradient'
+        })
+    }
 
 }
 
@@ -142,10 +142,10 @@ exports.getGradientLibrary = async (req, res, next) => {
             .populate('userId')
             .exec();
 
-            for(let i=0; i< gradients.length; i++){
-                console.log('id', gradients[i]._id)
-                console.log(gradients[i].userId.name)
-            }
+        for (let i = 0; i < gradients.length; i++) {
+            console.log('id', gradients[i]._id)
+            console.log(gradients[i].userId.name)
+        }
         const type = gradients.type;
 
         let favorites;
@@ -229,7 +229,8 @@ exports.searchLibrary = async (req, res, next) => {
             favorites = [];
         }
 
-
+        const page = + req.query.page || 1;
+        const urlBit = '/gradient/search'
         const query = req.body.query
         const gradients = await Gradient.find(
             {
@@ -255,6 +256,13 @@ exports.searchLibrary = async (req, res, next) => {
                 count: gradients.length,
                 query: query,
                 favorites: favorites,
+                currentPage: page,
+                hasNextPage: ITEMS_PER_PAGE * page < gradients,
+                hasPreviousPage: page > 1,
+                nextPage: page + 1,
+                prevPage: page - 1,
+                lastPage: Math.ceil(gradients / ITEMS_PER_PAGE),
+                urlBit: urlBit
 
             });
         }
@@ -345,7 +353,8 @@ exports.getFavorites = async (req, res, next) => {
             })
             .exec();
 
-
+const page  = + req.query.page||1
+const urlBit = '/gradient/favorites/'+user._id
 
         const favorites = user.favorites.map(favorite => { return favorite._id })
 
@@ -356,7 +365,14 @@ exports.getFavorites = async (req, res, next) => {
             favorites: favorites,
             // userId: user.favorites.userId,
             userId: user._id,
-            user: user
+            user: user,
+            currentPage: page,
+            hasNextPage: ITEMS_PER_PAGE * page < user.favorites,
+            hasPreviousPage: page > 1,
+            nextPage: page + 1,
+            prevPage: page - 1,
+            lastPage: Math.ceil(user.favorites.length / ITEMS_PER_PAGE),
+            urlBit: urlBit
         });
     }
     catch (err) {
@@ -515,9 +531,9 @@ exports.getEditGraidnet = async (req, res, next) => {
     try {
         const gradient = await Gradient.findById(req.params.gradientId).populate('userId').exec()
         const loggedIn = await User.findById(req.session.user._id).exec()
-     
+
         const creator = gradient.userId;
- 
+
 
         if (loggedIn._id.toString() == creator._id.toString()) {
             res.render('gradient-edit', {
@@ -551,13 +567,13 @@ exports.postEditGradients = async (req, res, next) => {
             .populate('userId')
             .exec()
 
-            console.log('gradient', gradient)
+        console.log('gradient', gradient)
 
         const creator = gradient.userId
 
         if (user._id.toString() == creator._id.toString()) {
             gradient = await updateGradient(gradient, req, user)
-           
+
             const favorites = user.favorites.map(favorite => { return favorite._id })
 
             res.render('gradient-view', {

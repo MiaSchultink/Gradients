@@ -10,18 +10,16 @@
 
     <div class="main">
       <div class="dup-container">
-          <% for(let i=0; i<duplicates.length; i++){ %> 
-            <h2>duplicates</h2>
-            <div><%=duplicates[i]%></div>
-            <br>
-            <br>
-            <% } %> 
-            <% for(let i=0; i<staying.length; i++){%>
-                <h2>staying</h2>
-                <div><%=staying[i]%></div>
-                <br>
-                <br>
-                <% } %> 
+        <h2>Before</h2>
+        <%for(let i=0; i<before.length; i++){%>
+        <div><%=before[i]._id%></div>
+     <% }%>
+     <br>
+     <br>
+     <h2>After</h2>
+     <% for( let i=0; i< after.length; i++){%>
+      <div><%=after[i]._id%></div>
+      <% } %> 
       </div>
     </div>
     
