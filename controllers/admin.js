@@ -30,32 +30,46 @@ exports.deleteDuplicates = async (req, res, next)=>{
     const user = await User.findById('60f147e8302a5323fc741c2c').populate('gradients').exec()
     const posts = user.gradients;
 
-    const duplicates = [];
-db.collectionName.aggregate([
-  { $match: { 
-    name: { "$ne": '' }  // discard selection criteria
-  }},
-  { $group: { 
-    _id: { name: "$name"}, // can be grouped on multiple properties 
-    dups: { "$addToSet": "$_id" }, 
-    count: { "$sum": 1 } 
-  }}, 
-  { $match: { 
-    count: { "$gt": 1 }    // Duplicates considered as count greater than one
-  }}
-],
-{allowDiskUse: true}       // For faster processing if set is larger
-)               // You can display result until this and check duplicates 
-.forEach(function(doc) {
-    doc.dups.shift();      // First element skipped for deleting
-    doc.dups.forEach( function(dupId){ 
-        duplicates.push(dupId);   // Getting all duplicate ids
+    const duplicates = []
+    const useless = []
+    const staying = []
+
+    const gradients  = await Gradient.find().exec()
+
+    for(let i=0; i< gradients.length; i++){
+        const comparing = gradients[i]
+        for(let y=0; y< gradients.length; y++){
+        const comparedTo = gradients[y]
+       if(comparing.colors[0]==comparedTo.colors[0]&&comparing.colors[1]==comparedTo.colors[1]){
+         const duplicateSet  = [comparing, comparedTo]
+         duplicates.push(duplicateSet)
+         console.log(duplicates)
+
+
+        //  duplicates.pop(duplicateSet)
+        //  staying.push(duplicateSet[0])
+        //  console.log(duplicates, 'duplicates')
+        //  console.log('staying', staying)
+
+       }
         }
-    )    
-})
-// If you want to Check all "_id" which you are deleting else print statement not needed
-printjson(duplicates);     
-// Remove all duplicates in one go    
-db.collectionName.remove({_id:{$in:duplicates}})  
+    }
+    // for(let t=0; t< duplicates.length; t++){
+    //     console.log(duplicates[t])
+    //     const Compare = duplicates[t]
+    //     for(let g=0; g<duplicates.length; g++){
+    //         const ComparedTo = duplicates[g]
+    //         if(Compare._id==ComparedTo._id){
+    //             duplicates.indexOf(comparedTo)
+    //          useless.push(comparedTo)
+    //         }
+    //     }
+    // }
+ res.render('duplicates', {
+     path:'/admin/duplicates',
+     duplicates: duplicates,
+      staying: staying 
+    
+ })
      
 }

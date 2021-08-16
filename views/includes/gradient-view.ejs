@@ -6,19 +6,10 @@
       <h1>
         <%=gradient.title%>
       </h1>
-      <div class="tags-container">
-      <%for(let i=0; i<gradient.tags.length; i++ ){%>
-        <div class="tag">#<%=gradient.tags[i]%>
-        </div>
-        <% } %>
-      </div>
+    
+      <div calss="creator-container">
       <div class="creator"><%=gradient.userId.name%></div>
-        <!-- <script>
-          function favorite(){
-        const heartIcon  = document.getElementById('heart')
-        heartIcon.className = 'fas fa-heart'
-          }
-      </script> -->
+    </div>
 </div>
 
           <div class="btns-container">
@@ -41,12 +32,11 @@
               <input type="hidden" name="_csrf" value='<%=csrfToken%>'>
               <button class="btn" type="submit"><i class="fas fa-trash-alt delete icon big"></i></button>
             </form>
+            <button class="btn" onclick="location.assign('/gradient/edit/<%=gradientId%>')"><i class="fad fa-edit icon big"></i></button>
+
 
             <% } %> 
-
-         <button class="btn" onclick="location.assign('/gradient/edit/<%=gradientId%>')"><i class="fad fa-edit"></i></button>
-
-            <% if(!library) { %>
+            <% if(!gradient.library) { %>
               <form class="form" action="/gradient/library" method="post">
                 <input type="hidden" name="_csrf" value='<%=csrfToken%>'>
                 <input type="hidden" name="gradientId" value='<%=gradientId%>'>
@@ -54,6 +44,13 @@
               </form>
               <% } %>
           </div>
+
+          <div class="tags-container">
+            <%for(let i=0; i<gradient.tags.length; i++ ){%>
+              <div class="tag">#<%=gradient.tags[i]%>
+              </div>
+              <% } %>
+            </div>
   </div>
 
   <div class="download-container">

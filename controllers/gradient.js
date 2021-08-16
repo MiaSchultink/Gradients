@@ -81,96 +81,6 @@ exports.getGradientPage = (req, res, next) => {
     }
 };
 
-// exports.postGradientPage2 = async (req, res, next) => {
-
-//     try {
-//         let title = req.body.title;
-//         if (title.length === 0) {
-//             title = "Gradient"
-//         }
-//         const user = await User.findById(req.session.user._id).exec()
-
-//         const colors = [req.body.color1, req.body.color2, req.body.color3, req.body.color4, req.body.color5, req.body.color6];
-
-//         for (let i = 0; i < colors.length; i++) {
-//             if (colors[i] == "#fcfcfc") {
-//                 const index = colors.indexOf(colors[i])
-//                 colors.splice(index)
-//             }
-//         }
-//         const tagsArray = req.body.tags.split(' ');
-//         const userId = user._id
-//         const type = req.body.type;
-//         const width = req.body.width;
-//         const aspectRatio = req.body.aspectRatio;
-//         const height = width * aspectRatio;
-
-
-
-
-//         const gradient = new Gradient({
-//             title: title,
-//             tags: tagsArray,
-//             colors: colors,
-//             userId: userId,
-//             type: type,
-//         });
-
-
-//         const primaryColors = {
-//             red: '#f00',
-//             orange: '#f58c02',
-//             yellow: '#ff0',
-//             green: '#00ff37',
-//             blue: '#00f',
-//             purple: '#b910e3',
-//             pink: '#f564df',
-//             black: '#000000',
-//             white: '#ffffff'
-//         };
-
-
-//         for (let i = 0; i < gradient.colors.length; i++) {
-//             const nearestColor = require('nearest-color').from(primaryColors)
-//             const color = nearestColor(gradient.colors[i])
-//             gradient.tags.push(color.name)
-//         }
-
-//         user.gradients.push(gradient)
-
-//         const favorites = user.favorites.map(favorite => { return favorite._id })
-
-
-//         await gradient.save();
-//         await user.save();
-
-
-//         res.render('gradient-view', {
-//             pageTitle: 'Your gradients',
-//             path: '/gradient/create',
-//             gradient: gradient,
-//             title: gradient.title,
-//             color1: req.body.color1,
-//             color2: req.body.color2,
-//             tags: gradient.tags,
-//             gradientId: gradient._id,
-//             userId: req.session.user._id,
-//             library: gradient.library,
-//             type: gradient.type,
-//             favorites: favorites,
-//             creator: userId
-
-//         });
-//     }
-//     catch (err) {
-//         console.log('create gradient err', err)
-//         res.render('error', {
-//             pageTitle: 'Error',
-//             path: '/error',
-//             message: 'Unable to create gradient'
-//         })
-//     }
-// };
 
 exports.postGradientPage = async(req, res, next) =>{
     try{
@@ -648,17 +558,6 @@ exports.postEditGradients = async (req, res, next) => {
         if (user._id.toString() == creator._id.toString()) {
             gradient = await updateGradient(gradient, req, user)
            
-            // const title = req.body.title
-            // // const colors = req.body.colors;
-
-            // const colors  = [req.body.color1,req.body.color2, req.body.color3, req.body.color4, req.body.color5, req.body.color6 ]
-            // const tags = req.body.tags;
-
-            // gradient.title = title
-            // gradient.colors = colors
-            // gradient.tags = tags
-
-            // await gradient.save();
             const favorites = user.favorites.map(favorite => { return favorite._id })
 
             res.render('gradient-view', {

@@ -1,0 +1,32 @@
+<%- include('includes/head.ejs')%>
+
+<body>
+
+  <div class="top">
+
+    <%- include('includes/search2.ejs')%>
+    <%- include('includes/logo.ejs')%>
+    <%- include('includes/navigation2.ejs')%>
+
+    <div class="main">
+      <div class="dup-container">
+          <% for(let i=0; i<duplicates.length; i++){ %> 
+            <h2>duplicates</h2>
+            <div><%=duplicates[i]%></div>
+            <br>
+            <br>
+            <% } %> 
+            <% for(let i=0; i<staying.length; i++){%>
+                <h2>staying</h2>
+                <div><%=staying[i]%></div>
+                <br>
+                <br>
+                <% } %> 
+      </div>
+    </div>
+    
+  </div>
+
+</body>
+
+<%- include('includes/end.ejs')%>
