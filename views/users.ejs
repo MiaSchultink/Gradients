@@ -13,9 +13,12 @@
       <div class="users-container">
       <% for(let i=0 ;i<users.length; i++){%> 
         <div class="user-info">
+          <div class="user-icon-container">
+          <%-include('includes/user-status.ejs')%>
+        </div>
             <div class=user-name>
             <%=users[i].name%>
-        </div>
+            </div>
     
         <button class="btn-text users" onclick="location.assign('/users/profile/<%=users[i]._id%>')">See profile</button>
     

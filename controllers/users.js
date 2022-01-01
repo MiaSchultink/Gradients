@@ -9,6 +9,8 @@ const ITEMS_PER_PAGE = 6;
 
 sgMail.setApiKey(process.env.API_KEY)
 
+
+
 exports.getLogIn = (req, res, next) => {
     res.render('login', {
         pageTitle: 'Login',
@@ -18,25 +20,25 @@ exports.getLogIn = (req, res, next) => {
 }
 
 exports.postLogin = async (req, res, next) => {
-    try{
-    const email = req.body.email;
-    const password = req.body.password;
-    const user = await User.findOne({email: email}).exec()
-    
-    if(!user){
-        res.redirect('/users/login')
-    }
-    const passwordMatch = await bcrypt.compare(password, user.password)
-    if(passwordMatch){
-        req.session.isLoggedIn = true;
-        req.session.user = user;
-        req.session.isAdmin = (user.role == 'admin');
-        await req.session.save()
-        res.redirect('/gradient/library')
-    }
-    else{
-        res.redirect('/users/login')
-    }
+    try {
+        const email = req.body.email;
+        const password = req.body.password;
+        const user = await User.findOne({ email: email }).exec()
+
+        if (!user) {
+            res.redirect('/users/login')
+        }
+        const passwordMatch = await bcrypt.compare(password, user.password)
+        if (passwordMatch) {
+            req.session.isLoggedIn = true;
+            req.session.user = user;
+            req.session.isAdmin = (user.role == 'admin');
+            await req.session.save()
+            res.redirect('/gradient/library')
+        }
+        else {
+            res.redirect('/users/login')
+        }
 
     }
     catch (err) {
@@ -48,31 +50,6 @@ exports.postLogin = async (req, res, next) => {
         })
     }
 
-    // User.findOne({ email: email })
-    //     .then(user => {
-    //         if (!user) {
-    //             return res.redirect('/users/login');
-    //         }
-    //         bcrypt
-    //             .compare(password, user.password)
-    //             .then(doMatch => {
-    //                 if (doMatch) {
-    //                     req.session.isLoggedIn = true;
-    //                     req.session.user = user;
-    //                     req.session.isAdmin = (user.role == 'admin');
-    //                     return req.session.save(err => {
-    //                         console.log(err);
-    //                         res.redirect('/');
-    //                     });
-    //                 }
-    //                 res.redirect('/users/login');
-    //             })
-    //             .catch(err => {
-    //                 console.log(err);
-    //                 res.redirect('/users/login');
-    //             });
-    //     })
-    //     .catch(err => console.log(err));
 };
 
 exports.postLogout = (req, res, next) => {
@@ -91,47 +68,47 @@ exports.getSignUp = (req, res, next) => {
 };
 
 exports.postSignUp = async (req, res, next) => {
-    try{
-    const name = req.body.name;
-    const email = req.body.email;
-    const password = req.body.password;
-    const confirmPassword = req.body.confirmPassword;
-    console.log('beginning')
+    try {
+        const name = req.body.name;
+        const email = req.body.email;
+        const password = req.body.password;
+        const confirmPassword = req.body.confirmPassword;
+        console.log('beginning')
 
-    const tempUser = await User.findOne({email:email}).exec();
-    if(tempUser){
-        throw new Error('Sign-up failed')
+        const tempUser = await User.findOne({ email: email }).exec();
+        if (tempUser) {
+            throw new Error('Sign-up failed')
+        }
+        const hashedPassword = await bcrypt.hash(password, 12)
+        console.log("hello")
+        const user = new User({
+            name: name,
+            email: email,
+            password: hashedPassword,
+            gradients: []
+        });
+        console.log('made user')
+        await user.save();
+        console.log('saved user')
+
+        const message = {
+            to: email,
+            from: 'contact@miaschultink.com',
+            subject: 'Sign-up Suceeded!',
+            html: '<h1>You sucessfully signed up!</h1>'
+        }
+        sgMail.send(message)
+        res.redirect('/users/login')
     }
-    const hashedPassword = await bcrypt.hash(password, 12)
-    console.log("hello")
-    const user = new User({
-        name: name,
-        email: email,
-        password: hashedPassword,
-        gradients: []
-    });
-    console.log('made user')
-    await user.save();
-    console.log('saved user')
 
-    const message = {
-        to: email,
-        from: 'contact@miaschultink.com',
-        subject: 'Sign-up Suceeded!',
-        html: '<h1>You sucessfully signed up!</h1>'
+    catch (err) {
+        console.log(err)
+        res.render('error', {
+            pageTitle: 'Error',
+            path: '/error',
+            message: 'Sign-up failed'
+        })
     }
-    sgMail.send(message)
-    res.redirect('/users/login')
-}
-
-catch (err) {
-    console.log(err)
-    res.render('error', {
-        pageTitle: 'Error',
-        path: '/error',
-        message: 'Sign-up failed'
-    })
-}
 
     // User.findOne({ email: email }).then(userDoc => {
     //     if (userDoc) {
@@ -271,7 +248,7 @@ exports.postNewPassword = async (req, res, next) => {
 
 exports.getProfile = async (req, res, next) => {
     try {
-        const page = +req.query||1;
+        const page = +req.query || 1;
 
         const userId = req.params.userId;
 
@@ -281,9 +258,9 @@ exports.getProfile = async (req, res, next) => {
             .exec();
 
 
-            const posts = await Gradient.find({userId:req.params.userId}).skip((page-1)*ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE).exec();
-            const totalPosts  = await Gradient.find({userId:req.params.userId}).countDocuments().exec();
-            const urlBit = '/users/posts/' + user._id;
+        const posts = await Gradient.find({ userId: req.params.userId }).skip((page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE).exec();
+        const totalPosts = await Gradient.find({ userId: req.params.userId }).countDocuments().exec();
+        const urlBit = '/users/posts/' + user._id;
         const favorites = user.favorites.map(favorite => { return favorite._id })
 
 
@@ -294,12 +271,12 @@ exports.getProfile = async (req, res, next) => {
             user: user,
             gradients: posts,
             favorites: favorites,
-            currentPage: page, 
-            hasNextPage: ITEMS_PER_PAGE*page<totalPosts,
-            hasPreviousPage: page>1,
-            nextPage: page+1,
-            prevPage: page -1,
-            lastPage: Math.ceil(totalPosts/ ITEMS_PER_PAGE),
+            currentPage: page,
+            hasNextPage: ITEMS_PER_PAGE * page < totalPosts,
+            hasPreviousPage: page > 1,
+            nextPage: page + 1,
+            prevPage: page - 1,
+            lastPage: Math.ceil(totalPosts / ITEMS_PER_PAGE),
             urlBit: urlBit
 
         });
@@ -316,16 +293,19 @@ exports.getProfile = async (req, res, next) => {
 
 exports.getMyProfile = async (req, res, next) => {
     try {
-        const page =  req.query.page||1;
-        
+
         const user = await User.findById(req.session.user._id)
             .populate('favorites')
             .populate('gradients')
             .exec();
-    
-        const urlBit = '/users/myProfile/'+user._id;
-        const posts = await Gradient.find({userId:req.session.user._id}).skip((page-1)*ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE).exec();
-        const totalPosts  = await Gradient.find({userId:req.session.user._id}).countDocuments().exec();
+
+        if (req.params.userId != user._id) {
+            throw new Error('This is not your profile')
+        }
+        const page = req.query.page || 1;
+        const urlBit = '/users/myProfile/' + user._id;
+        const posts = await Gradient.find({ userId: req.session.user._id }).skip((page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE).exec();
+        const totalPosts = await Gradient.find({ userId: req.session.user._id }).countDocuments().exec();
 
         const favorites = user.favorites.map(favorite => { return favorite._id })
 
@@ -416,7 +396,7 @@ exports.postUserEdit = async (req, res, next) => {
 
 exports.getPosts = async (req, res, next) => {
     try {
-     const page = +req.query.page||1;
+        const page = +req.query.page || 1;
 
         const user = await User.findById(req.params.userId)
             .populate('gradients')
@@ -429,8 +409,8 @@ exports.getPosts = async (req, res, next) => {
             })
             .exec()
 
-        const posts = await Gradient.find({userId:req.params.userId}).skip((page-1)*ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE).exec();
-        const totalPosts  = await Gradient.find({userId:req.params.userId}).countDocuments().exec();
+        const posts = await Gradient.find({ userId: req.params.userId }).skip((page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE).exec();
+        const totalPosts = await Gradient.find({ userId: req.params.userId }).countDocuments().exec();
         const urlBit = '/users/posts/' + user._id;
 
 
@@ -444,12 +424,12 @@ exports.getPosts = async (req, res, next) => {
             favorites: favorites,
             userId: user._id,
             user: user,
-            currentPage: page, 
-            hasNextPage: ITEMS_PER_PAGE*page<totalPosts,
-            hasPreviousPage: page>1,
-            nextPage: page+1,
-            prevPage: page -1,
-            lastPage: Math.ceil(totalPosts/ ITEMS_PER_PAGE),
+            currentPage: page,
+            hasNextPage: ITEMS_PER_PAGE * page < totalPosts,
+            hasPreviousPage: page > 1,
+            nextPage: page + 1,
+            prevPage: page - 1,
+            lastPage: Math.ceil(totalPosts / ITEMS_PER_PAGE),
             urlBit: urlBit
         })
     }
@@ -467,11 +447,14 @@ exports.getPosts = async (req, res, next) => {
 
 exports.getUsers = async (req, res, next) => {
     try {
-        const page = + req.query.page||1
+        const page = + req.query.page || 1
         const urlBit = '/users/find'
         const user = await User.findById(req.session.user._id).exec();
         const users = await User.find().exec();
-
+        
+        for(let i=0; i<users.length; i++){
+            console.log(users[i].name, users[i].gradients.length)
+        }
         res.render('users', {
             title: 'Find people',
             path: 'users/find',

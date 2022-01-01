@@ -1,0 +1,29 @@
+
+<% for(let i=0; i<users.length; i++){ %> 
+
+    <% if(users[i].gradients.length<=10){ %> 
+        <div class="user-icon"><i class="fad fa-duck"></i></div>
+    <% } else if (users[i].gradients.length >10 && users[i].gradients.length<=50) {%>
+        <div class="user-icon"><i class="fad fa-rabbit-fast"></i></div>
+    <% } else if (users[i].gradients.length >50 && users[i].gradients.length<=100) {%>
+        <div class="user-icon"><i class="fad fa-alicorn"></i></div>
+    <% } else if (users[i].gradients.length>100) { %> 
+        <div class="user-icon"><i class="fad fa-dragon"></i></div>
+    <% } %> 
+
+
+    <% const length=  users[i].gradients.length %>
+    <% switch(length){ %> 
+        <% case length<=10:%> 
+        <div class="user-icon"><i class="fad fa-duck"></i></div>
+        <% break%>
+     <% case length>10 && length<=50 %>  
+     <div class="user-icon"><i class="fad fa-rabbit-fast"></i></div>
+     <% break%>
+
+
+<% } %> 
+
+
+
+<% } %> 
